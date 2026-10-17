@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "Domain": {
+      "enum": [
+        "technology",
+        "clinical",
+        "sec",
+        "corporate_responsibility"
+      ],
+      "title": "Domain",
+      "type": "string"
+    },
+    "DomainKnowledgeStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "ready",
+            "partial",
+            "unavailable"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "document_count": {
+          "minimum": 0,
+          "title": "Document Count",
+          "type": "integer"
+        },
+        "chunk_count": {
+          "minimum": 0,
+          "title": "Chunk Count",
+          "type": "integer"
+        },
+        "warnings": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "document_count",
+        "chunk_count",
+        "warnings"
+      ],
+      "title": "DomainKnowledgeStatus",
+      "type": "object"
+    },
+    "KnowledgeStatus": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "live",
+            "demo"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "domains": {
+          "additionalProperties": {
+            "$ref": "#/$defs/DomainKnowledgeStatus"
+          },
+          "propertyNames": {
+            "$ref": "#/$defs/Domain"
+          },
+          "title": "Domains",
+          "type": "object"
+        }
+      },
+      "required": [
+        "mode",
+        "domains"
+      ],
+      "title": "KnowledgeStatus",
+      "type": "object"
+    },
+    "ServiceReadiness": {
+      "additionalProperties": false,
+      "properties": {
+        "consulting": {
+          "enum": [
+            "ready",
+            "unavailable"
+          ],
+          "title": "Consulting",
+          "type": "string"
+        },
+        "knowledge": {
+          "enum": [
+            "ready",
+            "partial",
+            "unavailable"
+          ],
+          "title": "Knowledge",
+          "type": "string"
+        },
+        "retail": {
+          "enum": [
+            "ready",
+            "unavailable"
+          ],
+          "title": "Retail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "consulting",
+        "knowledge",
+        "retail"
+      ],
+      "title": "ServiceReadiness",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "live",
+        "demo"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "degraded"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "services": {
+      "$ref": "#/$defs/ServiceReadiness"
+    },
+    "knowledge": {
+      "$ref": "#/$defs/KnowledgeStatus"
+    },
+    "warnings": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "request_id",
+    "mode",
+    "status",
+    "services",
+    "knowledge",
+    "warnings"
+  ],
+  "title": "HealthResponse",
+  "type": "object"
+}

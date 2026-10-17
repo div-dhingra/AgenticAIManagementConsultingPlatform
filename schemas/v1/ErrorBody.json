@@ -1,0 +1,52 @@
+{
+  "$defs": {
+    "ErrorDetail": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "minLength": 1,
+          "title": "Field",
+          "type": "string"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "message"
+      ],
+      "title": "ErrorDetail",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "minLength": 1,
+      "title": "Code",
+      "type": "string"
+    },
+    "message": {
+      "minLength": 1,
+      "title": "Message",
+      "type": "string"
+    },
+    "details": {
+      "items": {
+        "$ref": "#/$defs/ErrorDetail"
+      },
+      "title": "Details",
+      "type": "array"
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "details"
+  ],
+  "title": "ErrorBody",
+  "type": "object"
+}

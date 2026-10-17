@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "product_id": {
+      "minLength": 1,
+      "title": "Product Id",
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_id",
+    "name"
+  ],
+  "title": "Product",
+  "type": "object"
+}

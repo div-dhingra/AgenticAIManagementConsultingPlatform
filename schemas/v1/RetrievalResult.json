@@ -1,0 +1,160 @@
+{
+  "$defs": {
+    "Domain": {
+      "enum": [
+        "technology",
+        "clinical",
+        "sec",
+        "corporate_responsibility"
+      ],
+      "title": "Domain",
+      "type": "string"
+    },
+    "EvidenceChunk": {
+      "additionalProperties": false,
+      "properties": {
+        "chunk_id": {
+          "minLength": 1,
+          "title": "Chunk Id",
+          "type": "string"
+        },
+        "document_id": {
+          "minLength": 1,
+          "title": "Document Id",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "domain": {
+          "$ref": "#/$defs/Domain"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Company"
+        },
+        "report_year": {
+          "anyOf": [
+            {
+              "maximum": 2100,
+              "minimum": 1900,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Report Year"
+        },
+        "source_uri": {
+          "minLength": 1,
+          "title": "Source Uri",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Page"
+        },
+        "printed_page": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Printed Page"
+        },
+        "retrieval_score": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Retrieval Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "chunk_id",
+        "document_id",
+        "text",
+        "title",
+        "domain",
+        "company",
+        "report_year",
+        "source_uri",
+        "page",
+        "printed_page",
+        "retrieval_score"
+      ],
+      "title": "EvidenceChunk",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "mode": {
+      "enum": [
+        "live",
+        "demo"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "partial",
+        "unavailable"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "chunks": {
+      "items": {
+        "$ref": "#/$defs/EvidenceChunk"
+      },
+      "title": "Chunks",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "mode",
+    "status",
+    "chunks",
+    "warnings"
+  ],
+  "title": "RetrievalResult",
+  "type": "object"
+}

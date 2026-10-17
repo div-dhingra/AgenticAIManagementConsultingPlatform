@@ -1,0 +1,37 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "consulting": {
+      "enum": [
+        "ready",
+        "unavailable"
+      ],
+      "title": "Consulting",
+      "type": "string"
+    },
+    "knowledge": {
+      "enum": [
+        "ready",
+        "partial",
+        "unavailable"
+      ],
+      "title": "Knowledge",
+      "type": "string"
+    },
+    "retail": {
+      "enum": [
+        "ready",
+        "unavailable"
+      ],
+      "title": "Retail",
+      "type": "string"
+    }
+  },
+  "required": [
+    "consulting",
+    "knowledge",
+    "retail"
+  ],
+  "title": "ServiceReadiness",
+  "type": "object"
+}

@@ -1,0 +1,28 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "level": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Level",
+      "type": "string"
+    },
+    "reasons": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    }
+  },
+  "required": [
+    "level",
+    "reasons"
+  ],
+  "title": "Uncertainty",
+  "type": "object"
+}

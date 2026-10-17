@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "Domain": {
+      "enum": [
+        "technology",
+        "clinical",
+        "sec",
+        "corporate_responsibility"
+      ],
+      "title": "Domain",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "step": {
+      "enum": [
+        "route",
+        "retrieve",
+        "rank",
+        "validate",
+        "synthesize"
+      ],
+      "title": "Step",
+      "type": "string"
+    },
+    "domain": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Domain"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "skipped",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "detail": {
+      "minLength": 1,
+      "title": "Detail",
+      "type": "string"
+    }
+  },
+  "required": [
+    "step",
+    "domain",
+    "status",
+    "detail"
+  ],
+  "title": "TraceEvent",
+  "type": "object"
+}

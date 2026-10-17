@@ -1,0 +1,101 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "rank": {
+      "minimum": 1,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "kind": {
+      "enum": [
+        "product",
+        "component",
+        "business_action",
+        "diagnostic_action"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "rationale": {
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Priority",
+      "type": "string"
+    },
+    "assessment": {
+      "enum": [
+        "supported",
+        "conditional",
+        "proposed"
+      ],
+      "title": "Assessment",
+      "type": "string"
+    },
+    "evidence_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "prerequisites": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Prerequisites",
+      "type": "array"
+    },
+    "next_steps": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Next Steps",
+      "type": "array"
+    },
+    "success_metrics": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Success Metrics",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "rank",
+    "kind",
+    "title",
+    "rationale",
+    "priority",
+    "assessment",
+    "evidence_ids",
+    "prerequisites",
+    "next_steps",
+    "success_metrics"
+  ],
+  "title": "ConsultRecommendation",
+  "type": "object"
+}

@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "consulting-platform"
+version = "0.1.0"
+description = "Evidence-grounded multi-agent consulting workflow for the CMPE hackathon"
+requires-python = ">=3.11"
+dependencies = ["langgraph>=1.0,<2", "pydantic>=2.12,<3", "httpx>=0.28,<1", "python-dotenv>=1,<2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.14,<1"]
+app = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "streamlit>=1.40,<2"]
+knowledge = ["pymupdf>=1.24,<2", "sentence-transformers>=3,<6", "numpy>=1.26,<3", "scikit-learn>=1.5,<2"]
+retail = ["pandas>=2.2,<4", "mlxtend>=0.23,<1"]
+
+[project.scripts]
+consult = "consulting_platform.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

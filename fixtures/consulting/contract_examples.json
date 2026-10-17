@@ -1,0 +1,211 @@
+[
+  {
+    "question": "Which diagnostic checks should precede ordering replacement parts for an intermittently failing Cisco router?",
+    "context": {
+      "company": "Cisco",
+      "product_model": null,
+      "symptoms": [
+        "intermittent connectivity"
+      ],
+      "requirements": [],
+      "report_years": [],
+      "region": null
+    },
+    "max_recommendations": 3
+  },
+  {
+    "schema_version": "1.0",
+    "request_id": "44444444-4444-4444-8444-444444444444",
+    "mode": "demo",
+    "status": "answered",
+    "domains": [
+      "clinical"
+    ],
+    "summary": "Fixture Analyzer A meets the fixture requirement of at least 12 samples per run.",
+    "findings": [
+      {
+        "id": "f1",
+        "domain": "clinical",
+        "statement": "Fixture Analyzer A supports 16 samples per run.",
+        "assessment": "supported",
+        "evidence_ids": [
+          "fixture-clinical-p1-c1"
+        ]
+      }
+    ],
+    "recommendations": [
+      {
+        "id": "r1",
+        "rank": 1,
+        "kind": "product",
+        "title": "Evaluate Fixture Analyzer A",
+        "rationale": "Its documented fixture capacity exceeds the stated minimum of 12 samples per run.",
+        "priority": "high",
+        "assessment": "supported",
+        "evidence_ids": [
+          "fixture-clinical-p1-c1"
+        ],
+        "prerequisites": [],
+        "next_steps": [
+          "Compare the remaining workflow requirements before procurement."
+        ],
+        "success_metrics": [
+          "Samples processed per run during a validation trial."
+        ]
+      }
+    ],
+    "citations": [
+      {
+        "evidence_id": "fixture-clinical-p1-c1",
+        "document_id": "fixture-clinical",
+        "title": "Synthetic instrument fixture",
+        "domain": "clinical",
+        "company": "Fixture Labs",
+        "report_year": null,
+        "source_uri": "fixtures/consulting/synthetic_instrument.txt",
+        "page": null,
+        "printed_page": null,
+        "excerpt": "Fixture Analyzer A supports 16 samples per run."
+      }
+    ],
+    "clarification_questions": [],
+    "uncertainty": {
+      "level": "low",
+      "reasons": [
+        "The synthetic fixture explicitly states the capacity; other instrument requirements were not requested."
+      ]
+    },
+    "trace": [
+      {
+        "step": "route",
+        "domain": null,
+        "status": "completed",
+        "detail": "Selected clinical."
+      },
+      {
+        "step": "retrieve",
+        "domain": "clinical",
+        "status": "completed",
+        "detail": "Loaded one synthetic fixture chunk."
+      },
+      {
+        "step": "rank",
+        "domain": "clinical",
+        "status": "completed",
+        "detail": "One candidate satisfies the stated fixture capacity requirement."
+      },
+      {
+        "step": "validate",
+        "domain": null,
+        "status": "completed",
+        "detail": "Evidence IDs and excerpts match the fixture registry."
+      },
+      {
+        "step": "synthesize",
+        "domain": null,
+        "status": "completed",
+        "detail": "Produced a demonstration result."
+      }
+    ],
+    "warnings": [
+      "Synthetic demonstration data; not a real instrument recommendation."
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "request_id": "11111111-1111-4111-8111-111111111111",
+    "mode": "live",
+    "status": "insufficient_evidence",
+    "domains": [
+      "technology"
+    ],
+    "summary": "The indexed sources do not establish suitable parts or model-specific diagnostic steps.",
+    "findings": [],
+    "recommendations": [],
+    "citations": [],
+    "clarification_questions": [
+      "What is the exact router model, and what diagnostic logs are available?"
+    ],
+    "uncertainty": {
+      "level": "high",
+      "reasons": [
+        "No supporting passages were retrieved."
+      ]
+    },
+    "trace": [
+      {
+        "step": "route",
+        "domain": null,
+        "status": "completed",
+        "detail": "Selected technology."
+      },
+      {
+        "step": "retrieve",
+        "domain": "technology",
+        "status": "completed",
+        "detail": "No supporting chunks returned."
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "cart_items": [
+      "B5512"
+    ],
+    "top_k": 5
+  },
+  {
+    "schema_version": "1.0",
+    "request_id": "22222222-2222-4222-8222-222222222222",
+    "mode": "live",
+    "status": "empty_cart",
+    "cart_items": [],
+    "recommendations": [],
+    "explanation": "Add an item to receive evidence-based suggestions.",
+    "model_version": "retail-v1",
+    "warnings": []
+  },
+  {
+    "schema_version": "1.0",
+    "request_id": "55555555-5555-4555-8555-555555555555",
+    "mode": "demo",
+    "status": "ok",
+    "cart_items": [
+      "B5512"
+    ],
+    "recommendations": [
+      {
+        "product_id": "B810",
+        "name": "Bosch B810 Wireless Receiver",
+        "rank": 1,
+        "score": 0.2,
+        "support": 0.08,
+        "confidence": 0.2,
+        "lift": 2.0,
+        "evidence_count": 8,
+        "antecedent_count": 40,
+        "reason": "In a synthetic 100-basket training fixture, 8 of 40 baskets containing B5512 also contain B810; B810 appears in 10 baskets overall."
+      }
+    ],
+    "explanation": "A full-cart association passes the demo fixture thresholds.",
+    "model_version": "demo-retail-v1",
+    "warnings": [
+      "Synthetic demonstration counts; not measured from the supplied CSV."
+    ]
+  },
+  {
+    "schema_version": "1.0",
+    "request_id": "33333333-3333-4333-8333-333333333333",
+    "mode": "live",
+    "error": {
+      "code": "VALIDATION_ERROR",
+      "message": "Invalid request.",
+      "details": [
+        {
+          "field": "cart_items.0",
+          "message": "Unknown product SKU."
+        }
+      ]
+    }
+  }
+]

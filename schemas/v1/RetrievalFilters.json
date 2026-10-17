@@ -1,0 +1,32 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "companies": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Companies",
+      "type": "array"
+    },
+    "report_years": {
+      "items": {
+        "maximum": 2100,
+        "minimum": 1900,
+        "type": "integer"
+      },
+      "title": "Report Years",
+      "type": "array"
+    },
+    "document_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Document Ids",
+      "type": "array"
+    }
+  },
+  "title": "RetrievalFilters",
+  "type": "object"
+}

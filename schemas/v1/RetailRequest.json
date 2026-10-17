@@ -1,0 +1,23 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cart_items": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 40,
+      "title": "Cart Items",
+      "type": "array"
+    },
+    "top_k": {
+      "default": 5,
+      "maximum": 10,
+      "minimum": 1,
+      "title": "Top K",
+      "type": "integer"
+    }
+  },
+  "title": "RetailRequest",
+  "type": "object"
+}

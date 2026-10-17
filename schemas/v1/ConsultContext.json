@@ -1,0 +1,71 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "company": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Company"
+    },
+    "product_model": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Product Model"
+    },
+    "symptoms": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Symptoms",
+      "type": "array"
+    },
+    "requirements": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Requirements",
+      "type": "array"
+    },
+    "report_years": {
+      "items": {
+        "maximum": 2100,
+        "minimum": 1900,
+        "type": "integer"
+      },
+      "title": "Report Years",
+      "type": "array"
+    },
+    "region": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Region"
+    }
+  },
+  "title": "ConsultContext",
+  "type": "object"
+}

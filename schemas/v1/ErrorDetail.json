@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "field": {
+      "minLength": 1,
+      "title": "Field",
+      "type": "string"
+    },
+    "message": {
+      "minLength": 1,
+      "title": "Message",
+      "type": "string"
+    }
+  },
+  "required": [
+    "field",
+    "message"
+  ],
+  "title": "ErrorDetail",
+  "type": "object"
+}

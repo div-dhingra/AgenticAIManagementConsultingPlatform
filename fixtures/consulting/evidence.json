@@ -1,0 +1,80 @@
+[
+  {
+    "chunk_id": "fixture-technology-1",
+    "document_id": "fixture-doc-1",
+    "text": "Fixture Router A has 2 ports rated at 10 Gbps. The synthetic diagnostic guide requires the exact model and diagnostic logs before replacement.",
+    "title": "SYNTHETIC technology fixture 1",
+    "domain": "technology",
+    "company": "Cisco",
+    "report_year": null,
+    "source_uri": "fixtures/consulting/evidence.json",
+    "page": null,
+    "printed_page": null,
+    "retrieval_score": 0.8
+  },
+  {
+    "chunk_id": "fixture-clinical-2",
+    "document_id": "fixture-doc-2",
+    "text": "Fixture Analyzer A supports 16 samples per run. Fixture Analyzer B supports 8 samples per run.",
+    "title": "SYNTHETIC clinical fixture 2",
+    "domain": "clinical",
+    "company": "Agilent",
+    "report_year": null,
+    "source_uri": "fixtures/consulting/evidence.json",
+    "page": null,
+    "printed_page": null,
+    "retrieval_score": 0.8
+  },
+  {
+    "chunk_id": "fixture-sec-3",
+    "document_id": "fixture-doc-3",
+    "text": "The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk.",
+    "title": "SYNTHETIC sec fixture 3",
+    "domain": "sec",
+    "company": "Cisco",
+    "report_year": 2025,
+    "source_uri": "fixtures/consulting/evidence.json",
+    "page": null,
+    "printed_page": null,
+    "retrieval_score": 0.8
+  },
+  {
+    "chunk_id": "fixture-sec-4",
+    "document_id": "fixture-doc-4",
+    "text": "The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk.",
+    "title": "SYNTHETIC sec fixture 4",
+    "domain": "sec",
+    "company": "Agilent",
+    "report_year": 2025,
+    "source_uri": "fixtures/consulting/evidence.json",
+    "page": null,
+    "printed_page": null,
+    "retrieval_score": 0.8
+  },
+  {
+    "chunk_id": "fixture-corporate_responsibility-5",
+    "document_id": "fixture-doc-5",
+    "text": "The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks.",
+    "title": "SYNTHETIC corporate_responsibility fixture 5",
+    "domain": "corporate_responsibility",
+    "company": null,
+    "report_year": 2023,
+    "source_uri": "fixtures/consulting/evidence.json",
+    "page": null,
+    "printed_page": null,
+    "retrieval_score": 0.8
+  },
+  {
+    "chunk_id": "fixture-corporate_responsibility-6",
+    "document_id": "fixture-doc-6",
+    "text": "The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action.",
+    "title": "SYNTHETIC corporate_responsibility fixture 6",
+    "domain": "corporate_responsibility",
+    "company": null,
+    "report_year": 2024,
+    "source_uri": "fixtures/consulting/evidence.json",
+    "page": null,
+    "printed_page": null,
+    "retrieval_score": 0.8
+  }
+]

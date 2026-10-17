@@ -1,0 +1,40 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "ready",
+        "partial",
+        "unavailable"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "document_count": {
+      "minimum": 0,
+      "title": "Document Count",
+      "type": "integer"
+    },
+    "chunk_count": {
+      "minimum": 0,
+      "title": "Chunk Count",
+      "type": "integer"
+    },
+    "warnings": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "status",
+    "document_count",
+    "chunk_count",
+    "warnings"
+  ],
+  "title": "DomainKnowledgeStatus",
+  "type": "object"
+}

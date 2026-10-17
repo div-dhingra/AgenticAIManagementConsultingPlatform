@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "Product": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "minLength": 1,
+          "title": "Product Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_id",
+        "name"
+      ],
+      "title": "Product",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "live",
+        "demo"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "products": {
+      "items": {
+        "$ref": "#/$defs/Product"
+      },
+      "title": "Products",
+      "type": "array"
+    }
+  },
+  "required": [
+    "request_id",
+    "mode",
+    "products"
+  ],
+  "title": "CatalogResponse",
+  "type": "object"
+}

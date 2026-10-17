@@ -1,0 +1,150 @@
+{
+  "$defs": {
+    "RetailRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "minLength": 1,
+          "title": "Product Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "score": {
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "support": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Support",
+          "type": "number"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "lift": {
+          "exclusiveMinimum": 1,
+          "title": "Lift",
+          "type": "number"
+        },
+        "evidence_count": {
+          "minimum": 3,
+          "title": "Evidence Count",
+          "type": "integer"
+        },
+        "antecedent_count": {
+          "minimum": 3,
+          "title": "Antecedent Count",
+          "type": "integer"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product_id",
+        "name",
+        "rank",
+        "score",
+        "support",
+        "confidence",
+        "lift",
+        "evidence_count",
+        "antecedent_count",
+        "reason"
+      ],
+      "title": "RetailRecommendation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "request_id": {
+      "title": "Request Id",
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "live",
+        "demo"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "empty_cart",
+        "no_supported_pattern"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "cart_items": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Cart Items",
+      "type": "array"
+    },
+    "recommendations": {
+      "items": {
+        "$ref": "#/$defs/RetailRecommendation"
+      },
+      "title": "Recommendations",
+      "type": "array"
+    },
+    "explanation": {
+      "minLength": 1,
+      "title": "Explanation",
+      "type": "string"
+    },
+    "model_version": {
+      "minLength": 1,
+      "title": "Model Version",
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "request_id",
+    "mode",
+    "status",
+    "cart_items",
+    "recommendations",
+    "explanation",
+    "model_version",
+    "warnings"
+  ],
+  "title": "RetailResponse",
+  "type": "object"
+}

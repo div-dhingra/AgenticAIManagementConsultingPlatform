@@ -1,0 +1,1466 @@
+{
+  "run_id": "fbb2d790-2f6c-4d3c-b58a-5e801d72e3d8",
+  "created_at_utc": "2026-10-17T20:43:45.368064+00:00",
+  "mode": "demo",
+  "split": "development",
+  "provider": "fake",
+  "model": "deterministic fixture",
+  "rows": [
+    {
+      "case_id": "tech-1",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "52cc1f21-879a-4c05-b87b-62675f5c0f0c",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "technology"
+        ],
+        "summary": "Fixture Router A has 2 ports rated at 10 Gbps. Next: Evaluate Fixture Router A.",
+        "findings": [
+          {
+            "id": "technology:f1",
+            "domain": "technology",
+            "statement": "Fixture Router A has 2 ports rated at 10 Gbps.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-technology-1"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "technology:c:fixture-router-a",
+            "rank": 1,
+            "kind": "product",
+            "title": "Evaluate Fixture Router A",
+            "rationale": "1 matched, 0 unknown, 0 unmet constraints. Eligibility: eligible.",
+            "priority": "medium",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-technology-1"
+            ],
+            "prerequisites": [],
+            "next_steps": [
+              "Verify the cited specifications and all prerequisites before procurement."
+            ],
+            "success_metrics": [
+              "Fraction of stated requirements verified in an acceptance check."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-technology-1",
+            "document_id": "fixture-doc-1",
+            "title": "SYNTHETIC technology fixture 1",
+            "domain": "technology",
+            "company": "Cisco",
+            "report_year": null,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "Fixture Router A has 2 ports rated at 10 Gbps."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: technology"
+          },
+          {
+            "step": "retrieve",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Compared 1 candidates."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.014759749989025295
+    },
+    {
+      "case_id": "tech-2",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "7d3111a8-ef74-4858-969c-6a2d79fa9c79",
+        "mode": "demo",
+        "status": "needs_clarification",
+        "domains": [
+          "technology"
+        ],
+        "summary": "Fixture Router A has 2 ports rated at 10 Gbps. Resolve the clarification questions before acting.",
+        "findings": [
+          {
+            "id": "technology:f1",
+            "domain": "technology",
+            "statement": "Fixture Router A has 2 ports rated at 10 Gbps.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-technology-1"
+            ]
+          }
+        ],
+        "recommendations": [],
+        "citations": [
+          {
+            "evidence_id": "fixture-technology-1",
+            "document_id": "fixture-doc-1",
+            "title": "SYNTHETIC technology fixture 1",
+            "domain": "technology",
+            "company": "Cisco",
+            "report_year": null,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "Fixture Router A has 2 ports rated at 10 Gbps."
+          }
+        ],
+        "clarification_questions": [
+          "What is the exact router model, and what diagnostic logs confirm the fault?"
+        ],
+        "uncertainty": {
+          "level": "high",
+          "reasons": [
+            "Customer facts or requirements need clarification.",
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: technology"
+          },
+          {
+            "step": "retrieve",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "technology",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.01450741698499769
+    },
+    {
+      "case_id": "clinical-1",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "dbce9706-8657-4418-8594-4be606e71a67",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "clinical"
+        ],
+        "summary": "Fixture Analyzer A supports 16 samples per run. Next: Evaluate Fixture Analyzer A.",
+        "findings": [
+          {
+            "id": "clinical:f1",
+            "domain": "clinical",
+            "statement": "Fixture Analyzer A supports 16 samples per run.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-clinical-2"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "clinical:c:fixture-analyzer-a",
+            "rank": 1,
+            "kind": "product",
+            "title": "Evaluate Fixture Analyzer A",
+            "rationale": "1 matched, 0 unknown, 0 unmet constraints. Eligibility: eligible.",
+            "priority": "medium",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-clinical-2"
+            ],
+            "prerequisites": [],
+            "next_steps": [
+              "Verify the cited specifications and all prerequisites before procurement."
+            ],
+            "success_metrics": [
+              "Fraction of stated requirements verified in an acceptance check."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-clinical-2",
+            "document_id": "fixture-doc-2",
+            "title": "SYNTHETIC clinical fixture 2",
+            "domain": "clinical",
+            "company": "Agilent",
+            "report_year": null,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "Fixture Analyzer A supports 16 samples per run."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: clinical"
+          },
+          {
+            "step": "retrieve",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Compared 2 candidates."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.008755625109188259
+    },
+    {
+      "case_id": "clinical-2",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "51cc04cb-4bdd-4838-8cd8-91683a651410",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "clinical"
+        ],
+        "summary": "Fixture Analyzer A supports 16 samples per run.",
+        "findings": [
+          {
+            "id": "clinical:f1",
+            "domain": "clinical",
+            "statement": "Fixture Analyzer A supports 16 samples per run.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-clinical-2"
+            ]
+          }
+        ],
+        "recommendations": [],
+        "citations": [
+          {
+            "evidence_id": "fixture-clinical-2",
+            "document_id": "fixture-doc-2",
+            "title": "SYNTHETIC clinical fixture 2",
+            "domain": "clinical",
+            "company": "Agilent",
+            "report_year": null,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "Fixture Analyzer A supports 16 samples per run."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: clinical"
+          },
+          {
+            "step": "retrieve",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "clinical",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.00923904194496572
+    },
+    {
+      "case_id": "sec-1",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "afb43b8a-9b15-4b76-ade8-4a794756014e",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "sec"
+        ],
+        "summary": "The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk. Next: Review the cited sec priorities.",
+        "findings": [
+          {
+            "id": "sec:f1",
+            "domain": "sec",
+            "statement": "The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-sec-3"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "sec:a1",
+            "rank": 1,
+            "kind": "business_action",
+            "title": "Review the cited sec priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-sec-3"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-sec-3",
+            "document_id": "fixture-doc-3",
+            "title": "SYNTHETIC sec fixture 3",
+            "domain": "sec",
+            "company": "Cisco",
+            "report_year": 2025,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: sec"
+          },
+          {
+            "step": "retrieve",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "sec",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.008635500096715987
+    },
+    {
+      "case_id": "sec-2",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "08f1a78e-9e30-4c01-bbe0-ca1d60b85435",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "sec"
+        ],
+        "summary": "The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk. Next: Review the cited sec priorities.",
+        "findings": [
+          {
+            "id": "sec:f1",
+            "domain": "sec",
+            "statement": "The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-sec-4"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "sec:a1",
+            "rank": 1,
+            "kind": "business_action",
+            "title": "Review the cited sec priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-sec-4"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-sec-4",
+            "document_id": "fixture-doc-4",
+            "title": "SYNTHETIC sec fixture 4",
+            "domain": "sec",
+            "company": "Agilent",
+            "report_year": 2025,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: sec"
+          },
+          {
+            "step": "retrieve",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "sec",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.008498582988977432
+    },
+    {
+      "case_id": "csr-1",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "d3f8b5fc-ed95-440f-afe7-578b57ca3895",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "corporate_responsibility"
+        ],
+        "summary": "The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks. Next: Review the cited corporate_responsibility priorities.",
+        "findings": [
+          {
+            "id": "corporate_responsibility:f1",
+            "domain": "corporate_responsibility",
+            "statement": "The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-5"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "corporate_responsibility:a1",
+            "rank": 1,
+            "kind": "business_action",
+            "title": "Review the cited corporate_responsibility priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-5"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-corporate_responsibility-5",
+            "document_id": "fixture-doc-5",
+            "title": "SYNTHETIC corporate_responsibility fixture 5",
+            "domain": "corporate_responsibility",
+            "company": null,
+            "report_year": 2023,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: corporate_responsibility"
+          },
+          {
+            "step": "retrieve",
+            "domain": "corporate_responsibility",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "corporate_responsibility",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "corporate_responsibility",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.009936333983205259
+    },
+    {
+      "case_id": "csr-2",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "7c0e01f5-826c-4de7-a05e-1624751e1f2a",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "corporate_responsibility"
+        ],
+        "summary": "The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action. Next: Review the cited corporate_responsibility priorities.",
+        "findings": [
+          {
+            "id": "corporate_responsibility:f1",
+            "domain": "corporate_responsibility",
+            "statement": "The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-6"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "corporate_responsibility:a1",
+            "rank": 1,
+            "kind": "business_action",
+            "title": "Review the cited corporate_responsibility priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-6"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-corporate_responsibility-6",
+            "document_id": "fixture-doc-6",
+            "title": "SYNTHETIC corporate_responsibility fixture 6",
+            "domain": "corporate_responsibility",
+            "company": null,
+            "report_year": 2024,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: corporate_responsibility"
+          },
+          {
+            "step": "retrieve",
+            "domain": "corporate_responsibility",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "corporate_responsibility",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "corporate_responsibility",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 1 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 4 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.012298959074541926
+    },
+    {
+      "case_id": "cross-1",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "46eaa240-e97d-45da-a04a-0f216cd9f1ba",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "technology",
+          "sec",
+          "corporate_responsibility"
+        ],
+        "summary": "Cross-domain assessment: Fixture Router A has 2 ports rated at 10 Gbps. The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk. The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks. The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action. Next: Review the cited sec priorities; Review the cited corporate_responsibility priorities; Review the cited corporate_responsibility priorities.",
+        "findings": [
+          {
+            "id": "technology:f1",
+            "domain": "technology",
+            "statement": "Fixture Router A has 2 ports rated at 10 Gbps.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-technology-1"
+            ]
+          },
+          {
+            "id": "sec:f1",
+            "domain": "sec",
+            "statement": "The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-sec-3"
+            ]
+          },
+          {
+            "id": "corporate_responsibility:f1",
+            "domain": "corporate_responsibility",
+            "statement": "The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-5"
+            ]
+          },
+          {
+            "id": "corporate_responsibility:f2",
+            "domain": "corporate_responsibility",
+            "statement": "The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-6"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "sec:a1",
+            "rank": 1,
+            "kind": "business_action",
+            "title": "Review the cited sec priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-sec-3"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          },
+          {
+            "id": "corporate_responsibility:a1",
+            "rank": 2,
+            "kind": "business_action",
+            "title": "Review the cited corporate_responsibility priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-5"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Proposed execution order: complete 'Review the cited sec priorities' before this action.",
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          },
+          {
+            "id": "corporate_responsibility:a2",
+            "rank": 3,
+            "kind": "business_action",
+            "title": "Review the cited corporate_responsibility priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-corporate_responsibility-6"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-technology-1",
+            "document_id": "fixture-doc-1",
+            "title": "SYNTHETIC technology fixture 1",
+            "domain": "technology",
+            "company": "Cisco",
+            "report_year": null,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "Fixture Router A has 2 ports rated at 10 Gbps."
+          },
+          {
+            "evidence_id": "fixture-sec-3",
+            "document_id": "fixture-doc-3",
+            "title": "SYNTHETIC sec fixture 3",
+            "domain": "sec",
+            "company": "Cisco",
+            "report_year": 2025,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic Cisco 2025 filing identifies supply-chain disruption as an operational risk."
+          },
+          {
+            "evidence_id": "fixture-corporate_responsibility-5",
+            "document_id": "fixture-doc-5",
+            "title": "SYNTHETIC corporate_responsibility fixture 5",
+            "domain": "corporate_responsibility",
+            "company": null,
+            "report_year": 2023,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic SOFI 2023 report identifies conflict and rising food prices as food-security risks."
+          },
+          {
+            "evidence_id": "fixture-corporate_responsibility-6",
+            "document_id": "fixture-doc-6",
+            "title": "SYNTHETIC corporate_responsibility fixture 6",
+            "domain": "corporate_responsibility",
+            "company": null,
+            "report_year": 2024,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic SOFI 2024 report identifies financing gaps as a barrier to food-security action."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: technology, sec, corporate_responsibility"
+          },
+          {
+            "step": "retrieve",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "technology",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "technology",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "retrieve",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "sec",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "retrieve",
+            "domain": "corporate_responsibility",
+            "status": "completed",
+            "detail": "Retrieved 2 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "corporate_responsibility",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "corporate_responsibility",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 3 domains with 1 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 6 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.013652833993546665
+    },
+    {
+      "case_id": "cross-2",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "ad6d830f-4a06-42e1-9ff5-f68ae746cc15",
+        "mode": "demo",
+        "status": "answered",
+        "domains": [
+          "clinical",
+          "sec"
+        ],
+        "summary": "Cross-domain assessment: Fixture Analyzer A supports 16 samples per run. The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk. Next: Review the cited sec priorities.",
+        "findings": [
+          {
+            "id": "clinical:f1",
+            "domain": "clinical",
+            "statement": "Fixture Analyzer A supports 16 samples per run.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-clinical-2"
+            ]
+          },
+          {
+            "id": "sec:f1",
+            "domain": "sec",
+            "statement": "The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk.",
+            "assessment": "supported",
+            "evidence_ids": [
+              "fixture-sec-4"
+            ]
+          }
+        ],
+        "recommendations": [
+          {
+            "id": "sec:a1",
+            "rank": 1,
+            "kind": "business_action",
+            "title": "Review the cited sec priorities",
+            "rationale": "Use the cited disclosure as an input to the proposed planning review.",
+            "priority": "medium",
+            "assessment": "proposed",
+            "evidence_ids": [
+              "fixture-sec-4"
+            ],
+            "prerequisites": [
+              "Validate priorities against local requirements."
+            ],
+            "next_steps": [
+              "Assign an owner to review the cited risk or barrier."
+            ],
+            "success_metrics": [
+              "Number of cited priorities with an assigned owner and next action."
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "evidence_id": "fixture-clinical-2",
+            "document_id": "fixture-doc-2",
+            "title": "SYNTHETIC clinical fixture 2",
+            "domain": "clinical",
+            "company": "Agilent",
+            "report_year": null,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "Fixture Analyzer A supports 16 samples per run."
+          },
+          {
+            "evidence_id": "fixture-sec-4",
+            "document_id": "fixture-doc-4",
+            "title": "SYNTHETIC sec fixture 4",
+            "domain": "sec",
+            "company": "Agilent",
+            "report_year": 2025,
+            "source_uri": "fixtures/consulting/evidence.json",
+            "page": null,
+            "printed_page": null,
+            "excerpt": "The synthetic Agilent 2025 filing identifies supplier concentration as an operational risk."
+          }
+        ],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "medium",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: clinical, sec"
+          },
+          {
+            "step": "retrieve",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "clinical",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "clinical",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "retrieve",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Retrieved 1 allowed chunks in round 1."
+          },
+          {
+            "step": "validate",
+            "domain": "sec",
+            "status": "completed",
+            "detail": "Checked evidence identities, verbatim quotes, and extracted attribute values."
+          },
+          {
+            "step": "rank",
+            "domain": "sec",
+            "status": "skipped",
+            "detail": "No supported candidate comparison was available or requested."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Validated citation provenance and reviewed supported claims/actions."
+          },
+          {
+            "step": "synthesize",
+            "domain": null,
+            "status": "completed",
+            "detail": "Coordinated 2 domains with 0 proposed ordering links between existing actions; no new factual claims."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 5 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.00941549998242408
+    },
+    {
+      "case_id": "edge-1",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "2744ffb7-4db2-43bc-a381-523cf682cb84",
+        "mode": "demo",
+        "status": "insufficient_evidence",
+        "domains": [],
+        "summary": "This request is outside the four supported consulting domains.",
+        "findings": [],
+        "recommendations": [],
+        "citations": [],
+        "clarification_questions": [],
+        "uncertainty": {
+          "level": "high",
+          "reasons": [
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: none"
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "No grounded content was available for semantic review."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 1 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.0033948750933632255
+    },
+    {
+      "case_id": "edge-2",
+      "response": {
+        "schema_version": "1.0",
+        "request_id": "e522205a-8a10-4d00-95f5-5b5336916bdd",
+        "mode": "demo",
+        "status": "needs_clarification",
+        "domains": [
+          "sec"
+        ],
+        "summary": "More customer information is needed before a supported recommendation can be made.",
+        "findings": [],
+        "recommendations": [],
+        "citations": [],
+        "clarification_questions": [
+          "Which company should be analyzed? The question and company field differ.",
+          "Which report years should be used? The question and context years differ."
+        ],
+        "uncertainty": {
+          "level": "high",
+          "reasons": [
+            "Customer facts or requirements need clarification.",
+            "Evidence does not cover every requested domain.",
+            "See source, validation, or service limitations in warnings."
+          ]
+        },
+        "trace": [
+          {
+            "step": "route",
+            "domain": null,
+            "status": "completed",
+            "detail": "Selected domains: sec"
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "No grounded content was available for semantic review."
+          },
+          {
+            "step": "validate",
+            "domain": null,
+            "status": "completed",
+            "detail": "Final schema check; 1 model calls used."
+          }
+        ],
+        "warnings": [
+          "Synthetic demo data and deterministic model outputs; not authoritative advice."
+        ]
+      },
+      "latency_seconds": 0.0029895839979872108
+    }
+  ],
+  "metrics": {
+    "interpretation": "synthetic integration checks only",
+    "completed_requests": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "routing_exact_match": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "routing_micro_precision": {
+      "numerator": 14,
+      "denominator": 14,
+      "value": 1.0
+    },
+    "routing_micro_recall": {
+      "numerator": 14,
+      "denominator": 14,
+      "value": 1.0
+    },
+    "keyword_baseline_exact_match": {
+      "numerator": 12,
+      "denominator": 12,
+      "value": 1.0
+    },
+    "expected_status_accuracy": {
+      "numerator": 3,
+      "denominator": 3,
+      "value": 1.0
+    },
+    "citation_reference_validity": {
+      "numerator": 24,
+      "denominator": 24,
+      "value": 1.0
+    },
+    "final_answer_evidence_hit": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+    },
+    "human_citation_support": {
+      "numerator": 0,
+      "denominator": 0,
+      "value": null
+    },
+    "human_recommendation_relevance": {
+      "mean": null,
+      "reviewed": 0
+    },
+    "human_response_quality": {
+      "mean": null,
+      "reviewed": 0
+    },
+    "latency_seconds": {
+      "mean": 0.009673666936578229,
+      "max": 0.014759749989025295
+    }
+  }
+}

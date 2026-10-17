@@ -1,0 +1,56 @@
+{
+  "$defs": {
+    "Domain": {
+      "enum": [
+        "technology",
+        "clinical",
+        "sec",
+        "corporate_responsibility"
+      ],
+      "title": "Domain",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "domain": {
+      "$ref": "#/$defs/Domain"
+    },
+    "statement": {
+      "minLength": 1,
+      "title": "Statement",
+      "type": "string"
+    },
+    "assessment": {
+      "enum": [
+        "supported",
+        "inference"
+      ],
+      "title": "Assessment",
+      "type": "string"
+    },
+    "evidence_ids": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Evidence Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "id",
+    "domain",
+    "statement",
+    "assessment",
+    "evidence_ids"
+  ],
+  "title": "Finding",
+  "type": "object"
+}

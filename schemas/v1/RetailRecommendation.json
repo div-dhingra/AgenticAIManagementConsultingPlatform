@@ -1,0 +1,71 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "product_id": {
+      "minLength": 1,
+      "title": "Product Id",
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "rank": {
+      "minimum": 1,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "score": {
+      "minimum": 0,
+      "title": "Score",
+      "type": "number"
+    },
+    "support": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Support",
+      "type": "number"
+    },
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "lift": {
+      "exclusiveMinimum": 1,
+      "title": "Lift",
+      "type": "number"
+    },
+    "evidence_count": {
+      "minimum": 3,
+      "title": "Evidence Count",
+      "type": "integer"
+    },
+    "antecedent_count": {
+      "minimum": 3,
+      "title": "Antecedent Count",
+      "type": "integer"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_id",
+    "name",
+    "rank",
+    "score",
+    "support",
+    "confidence",
+    "lift",
+    "evidence_count",
+    "antecedent_count",
+    "reason"
+  ],
+  "title": "RetailRecommendation",
+  "type": "object"
+}
