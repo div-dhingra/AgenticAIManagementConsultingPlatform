@@ -1,0 +1,99 @@
+{
+  "model_version": "retail-v1+3d48b248",
+  "generated_at": "2026-10-17T22:25:41+00:00",
+  "input": {
+    "path": "data/raw/retail/market_basket_transactions.csv",
+    "sha256": "3d48b2480bee2ca3942f7add047233eb69461d210b996733c3eff3ee0bf5cbe6"
+  },
+  "input_issues": [],
+  "n_training": 800,
+  "n_rules": 1510,
+  "config": {
+    "k": 5,
+    "protocol": "For each held-out basket with >=2 items, hide one item chosen by random.Random('42:<transaction_id>') and query with the rest.",
+    "thresholds": {
+      "min_evidence_count": 3,
+      "min_confidence": 0.1,
+      "min_lift_exclusive": 1.0
+    },
+    "tuning": "None. Thresholds are fixed team defaults; held-out baskets were not used to choose them."
+  },
+  "n_test_baskets": 200,
+  "n_queries": 200,
+  "skipped_single_item_baskets": 0,
+  "model": {
+    "hit_rate_at_k": 0.04,
+    "hits": 8,
+    "coverage": 0.27,
+    "covered_queries": 54,
+    "hit_rate_on_covered_queries": 0.14814814814814814,
+    "precision_at_k_micro": 0.03225806451612903,
+    "precision_at_k_micro_definition": "total hits / total returned items; queries with an empty list add 0 to both",
+    "precision_at_k_macro_covered": 0.02962962962962963,
+    "precision_at_k_macro_covered_definition": "mean of hits/len(list) over queries with a non-empty list",
+    "mean_list_length": 1.24,
+    "catalog_coverage": 0.975,
+    "by_query_cart_size": {
+      "1": {
+        "queries": 49,
+        "covered": 49,
+        "hits": 8,
+        "coverage": 1.0,
+        "hit_rate_at_k": 0.16326530612244897
+      },
+      "2": {
+        "queries": 44,
+        "covered": 5,
+        "hits": 0,
+        "coverage": 0.11363636363636363,
+        "hit_rate_at_k": 0.0
+      },
+      "3": {
+        "queries": 54,
+        "covered": 0,
+        "hits": 0,
+        "coverage": 0.0,
+        "hit_rate_at_k": 0.0
+      },
+      "4": {
+        "queries": 53,
+        "covered": 0,
+        "hits": 0,
+        "coverage": 0.0,
+        "hit_rate_at_k": 0.0
+      }
+    }
+  },
+  "popularity_baseline": {
+    "description": "Top-k most frequent training items not already in the cart (evaluation only; never used in the UI).",
+    "hit_rate_at_k": 0.17,
+    "hits": 34,
+    "coverage": 1.0,
+    "precision_at_k": 0.034,
+    "precision_at_k_definition": "hits / (queries * k); the baseline always returns k items",
+    "catalog_coverage": 0.175
+  },
+  "latency_ms_in_process": {
+    "mean": 0.002160045551136136,
+    "p50": 0.00033318065106868744,
+    "p95": 0.008667120710015297,
+    "max": 0.013541895896196365,
+    "note": "model.recommend() only, excluding HTTP and serialization"
+  },
+  "demo_cases": {
+    "supported_cart": [
+      "5800CO"
+    ],
+    "supported_cart_top_suggestions": [
+      "WS4916",
+      "XRN-2010",
+      "HS2016NK",
+      "60-652-95R",
+      "60-746-01-95R"
+    ],
+    "unsupported_cart": [
+      "0407-001",
+      "0806-001"
+    ]
+  }
+}
