@@ -22,8 +22,12 @@ def test_get_status(tmp_path):
         assert result.domains[domain].chunk_count == 0
 
 
-def test_retrieve_without_index():
-    service = LocalKnowledgeService()
+def test_retrieve_without_index(tmp_path):
+    missing_index_dir = tmp_path / "missing_index"
+
+    service = LocalKnowledgeService(
+        index_dir=missing_index_dir,
+    )
 
     result = asyncio.run(
         service.retrieve(

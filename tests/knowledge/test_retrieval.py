@@ -76,8 +76,8 @@ def test_cisco_filter(indexed_service):
         assert 0.0 <= chunk.retrieval_score <= 1.0
 
 
-def test_missing_domain():
-    service = create_knowledge_service()
+def test_missing_domain(indexed_service):
+    service = indexed_service
 
     async def run_test():
         return await service.retrieve(
@@ -89,9 +89,14 @@ def test_missing_domain():
     result = asyncio.run(run_test())
 
     assert result.mode == "live"
-    assert result.status == "unavailable"
-    assert result.chunks == []
-    assert len(result.warnings) > 0
+    assert result.status == "ok"
+    assert len(result.chunks) > 0
+    assert len(result.chunks) <= 3
+
+    for chunk in result.chunks:
+        assert chunk.domain == Domain.TECHNOLOGY
+        assert chunk.company == "Cisco"
+        assert chunk.source_uri.startswith("https://")
 
 
 def test_missing_index(tmp_path):

@@ -16,6 +16,9 @@ def identify_company(file_path: Path) -> str | None:
     if "cisco" in folder_names:
         return "Cisco"
 
+    if "google" in folder_names or "gcp" in folder_names:
+        return "Google"
+
     if "agilent" in folder_names:
         return "Agilent"
 
