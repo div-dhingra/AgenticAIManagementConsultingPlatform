@@ -1,0 +1,135 @@
+[
+    {
+        "document_id": "c82491a940bf2a3c",
+        "title": "0001090872-25-000087",
+        "domain": "sec",
+        "company": "Agilent",
+        "report_year": 2025,
+        "filing_type": "10-K",
+        "local_path": "data/raw/sec/Agilent/b5098e8e-5716-4b35-8d8e-84dbdab516b1.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "c82491a940bf2a3c001481280f3839a98a45f47af3cebc37aee8622eb936d52b",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 217
+    },
+    {
+        "document_id": "46106605128d8b0d",
+        "title": "0001652044-25-000014",
+        "domain": "sec",
+        "company": "Alphabet",
+        "report_year": 2024,
+        "filing_type": "10-K",
+        "local_path": "data/raw/sec/Alphabet/0ca59726-c36c-45fe-a114-e147f8cd7237.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "46106605128d8b0dfc668e25b7cc70bdfc68e87fa8ba5d7aad8b0456665d3db9",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 108
+    },
+    {
+        "document_id": "090e61ecab8be567",
+        "title": "0001652044-26-000018",
+        "domain": "sec",
+        "company": "Alphabet",
+        "report_year": 2025,
+        "filing_type": "10-K",
+        "local_path": "data/raw/sec/Alphabet/8873e505-7403-4c46-b377-81d814482cbb.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "090e61ecab8be567475c7d2ebb948c27f9da2f941ab02f6640db13ff7287b9c3",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 104
+    },
+    {
+        "document_id": "1a02d7787ab8bbe8",
+        "title": "0000858877-26-000132",
+        "domain": "sec",
+        "company": "Cisco",
+        "report_year": 2026,
+        "filing_type": "10-K",
+        "local_path": "data/raw/sec/Cisco/028fbac9-c5ba-409b-83ce-dfee9c17fdbc.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "1a02d7787ab8bbe822f22932f1b2e7f960c94d12666232dd07009447f7d9a36e",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 285
+    },
+    {
+        "document_id": "67c12b7559d5cbd3",
+        "title": "0000858877-25-000111",
+        "domain": "sec",
+        "company": "Cisco",
+        "report_year": 2025,
+        "filing_type": "10-K",
+        "local_path": "data/raw/sec/Cisco/6c821d1a-cf4e-4310-9801-df9399aa701b.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "67c12b7559d5cbd301265603e41e49011a583ff233c6d811d411b23f1625d003",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 123
+    },
+    {
+        "document_id": "9d29ae885c9d480a",
+        "title": "The State of Food Security and Nutrition in the World 2023",
+        "domain": "corporate_responsibility",
+        "company": null,
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/corporate_responsibility/SOFI-2023.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "9d29ae885c9d480a13f54c6f5e8a2a6e2e52bce761d8f3b8c72651815290a481",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 316
+    },
+    {
+        "document_id": "00752f3c65b803c1",
+        "title": "The State of Food Security and Nutrition in the World 2024",
+        "domain": "corporate_responsibility",
+        "company": null,
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/corporate_responsibility/SOFI-2024.pdf",
+        "original_url": null,
+        "import_date": "2026-10-18",
+        "sha256": "00752f3c65b803c13412f5075069f3c0e73da2e6e5cd38e225c4379bc9966b4a",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 286
+    }
+]
