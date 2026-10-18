@@ -41,11 +41,44 @@ def filter_evidence(
     )
 
 
-def supports_valid(supports: list[Support], registry: dict[str, EvidenceChunk]) -> bool:
-    return bool(supports) and all(
-        s.evidence_id in registry and s.quote.strip() and s.quote in registry[s.evidence_id].text
-        for s in supports
-    )
+def resolve_supports(
+    supports: list[Support],
+    registry: dict[str, EvidenceChunk],
+) -> tuple[list[Support], str | None]:
+    """Recover verbatim spans allowing whitespace and straight/curly quote glyphs.
+
+    PDF extraction inserts line breaks; a model often emits spaces instead.
+    Match the same case-sensitive words/numbers and punctuation in order (except
+    typographic quote glyphs), then retain the ORIGINAL source substring. Never
+    fuzzy-match wording, quantities, dashes, or ellipses.
+    """
+    if not supports:
+        return [], "missing evidence support"
+    resolved = []
+    for support in supports:
+        chunk = registry.get(support.evidence_id)
+        if chunk is None:
+            return [], "unknown evidence ID"
+        quote = support.quote.strip()
+        if not quote:
+            return [], "empty evidence quote"
+        if quote in chunk.text:
+            original = quote
+        else:
+            glyphs = {character: "['‘’]" for character in "'‘’"}
+            glyphs.update({character: '["“”]' for character in '"“”'})
+            pattern = r"\s+".join(
+                "".join(glyphs.get(character, re.escape(character)) for character in token)
+                for token in quote.split()
+            )
+            match = re.search(pattern, chunk.text)
+            if not match:
+                return [], "quote does not match source words and punctuation"
+            original = match.group(0)
+        if len(original) > 400:
+            return [], "source quote exceeds 400 characters; use a shorter excerpt"
+        resolved.append(support.model_copy(update={"quote": original}))
+    return resolved, None
 
 
 def _value_in_quotes(value: str | float | bool, supports: list[Support]) -> bool:
@@ -86,28 +119,40 @@ def grounded_candidates(
 ) -> tuple[list[Candidate], list[str]]:
     accepted, warnings, seen = [], [], set()
     for candidate in candidates:
+        identity, issue = resolve_supports(candidate.identity_supports, registry)
         if (
             candidate.id in seen
-            or not supports_valid(candidate.identity_supports, registry)
-            or candidate.label.casefold()
-            not in " ".join(s.quote for s in candidate.identity_supports).casefold()
+            or issue
+            or " ".join(candidate.label.casefold().split())
+            not in " ".join(" ".join(s.quote for s in identity).casefold().split())
         ):
-            warnings.append("Removed a candidate with unsupported or duplicate identity.")
+            warnings.append(
+                "Removed a candidate with unsupported or duplicate identity."
+                + (f" Reason: {issue}." if issue else "")
+            )
             continue
         seen.add(candidate.id)
         attributes = {}
         for name, fact in candidate.attributes.items():
+            supports, issue = resolve_supports(fact.supports, registry)
             if (
-                supports_valid(fact.supports, registry)
-                and _value_in_quotes(fact.value, fact.supports)
-                and _unit_in_quotes(fact.unit, fact.supports)
+                not issue
+                and _value_in_quotes(fact.value, supports)
+                and _unit_in_quotes(fact.unit, supports)
             ):
-                attributes[name] = fact
+                attributes[name] = fact.model_copy(update={"supports": supports})
             else:
                 warnings.append(
                     f"Removed unsupported attribute {name} from candidate {candidate.id}."
                 )
-        accepted.append(candidate.model_copy(update={"attributes": attributes}))
+        accepted.append(
+            candidate.model_copy(
+                update={
+                    "identity_supports": identity,
+                    "attributes": attributes,
+                }
+            )
+        )
     return accepted, warnings
 
 
@@ -116,14 +161,21 @@ def ground_analysis(
     chunks: list[EvidenceChunk],
 ) -> tuple[SpecialistAnalysis, list[str]]:
     registry = {c.chunk_id: c for c in chunks}
-    findings = [f for f in analysis.findings if supports_valid(f.supports, registry)]
-    actions = [a for a in analysis.actions if supports_valid(a.supports, registry)]
+    findings, actions, rejected = [], [], []
+    for items, output in [(analysis.findings, findings), (analysis.actions, actions)]:
+        for item in items:
+            supports, issue = resolve_supports(item.supports, registry)
+            if issue:
+                rejected.append(issue)
+            else:
+                output.append(item.model_copy(update={"supports": supports}))
     candidates, warnings = grounded_candidates(analysis.candidates, registry)
     removed = len(analysis.findings) - len(findings) + len(analysis.actions) - len(actions)
     if removed:
         warnings.append(
             f"Removed {removed} claims/actions with invalid evidence references or quotes."
         )
+        warnings.extend(f"Evidence rejection: {reason}." for reason in dict.fromkeys(rejected))
     return analysis.model_copy(
         update={
             "findings": findings,

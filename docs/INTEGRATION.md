@@ -42,6 +42,12 @@ to work. Those implementations remain yours. Shared RetailRequest cannot validat
 unknown SKUs by itself; your service/route must validate IDs against its catalog
 and return the contracted 422 error for unknown IDs.
 
+For development before the real KB is ready, the CLI also accepts `--mode live
+--evidence-file fixtures/consulting/controlled_real_passages.json`. This runs real
+provider calls on selected real passages and always warns that search/full source
+coverage are not evaluated. It is an explicit local testing path, not an outage
+fallback or a new HTTP parameter. See `docs/CONTROLLED_TESTS.md`.
+
 ## Knowledge teammate
 
 Implement the exact protocol in `contracts.py`:

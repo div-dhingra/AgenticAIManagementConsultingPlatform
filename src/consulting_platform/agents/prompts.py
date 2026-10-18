@@ -23,6 +23,9 @@ For each domain supply a focused query and whether documented candidate comparis
 is needed. Parse only explicit customer constraints into constraints with attribute,
 operator, expected_value, unit, required and weight. Do not invent constraints or
 weights from unavailable budgets. Use weight=1 unless the user states priorities.
+Use numeric expected_value for numeric thresholds, with units in unit, not in
+the value string. Attribute names must distinguish relevant dimensions such as
+1G versus 10G port counts; the specialist must reuse those exact attribute keys.
 Conflicting company/model/year/context or unclear intent requires clarification.
 Out-of-scope questions have tasks={} rather than an invented specialist answer.
 """
@@ -53,10 +56,24 @@ def specialist_prompt(domain: Domain) -> str:
 Use ONLY supplied chunks. Every finding needs one or more exact short quotes and
 existing evidence IDs. A quote must support the full claim; avoid extra unsupported
 causal or numerical clauses. Mark explicit deductions as inference.
+Use one atomic supported claim per finding; separate different risk factors or
+specifications instead of putting unrelated claims into one multi-part finding.
+Use each source chunk's chunk_id as evidence_id, never its document_id or title.
+Keep quotes short (prefer under 250 characters); do not splice distant excerpts
+or insert ellipses. Separate supports can cite separate contiguous excerpts.
 Extract candidate identities and attributes only when comparison is requested;
 each identity and attribute must have supporting exact quotes. Keep units explicit,
 do not merge different products, and omit unknown facts. Numerical attribute values
 must appear in their cited quotes. Do not reinterpret page numbers as attributes.
+Candidate label must be the exact identifier/name found in its identity quote;
+do not prepend a manufacturer or marketing description absent from that quote.
+Reuse the task's exact constraint attribute keys so the ranker can compare facts.
+Numeric value fields contain numbers only; put units in unit. Table quotes need
+the relevant column header together with the model's row to establish meaning.
+Use separate supports when a table header and row are not adjacent; do not splice
+them into an invented contiguous quote. Extract only attributes needed by the
+task constraints. For a candidate comparison, return actions=[] and let the
+deterministic ranker generate the product recommendations.
 Proposed business/diagnostic actions need cited premises, prerequisites, concrete
 next_steps and suggested success_metrics. Do not generate product purchases here;
 the deterministic ranker handles them. If evidence is missing, ask clarification

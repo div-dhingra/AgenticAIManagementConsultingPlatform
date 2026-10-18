@@ -1,0 +1,22 @@
+{
+  "description": "Local source PDF provenance for verbatim controlled passages. Raw PDFs are ignored by Git. Cisco technical table is transcribed separately from the HTTPS source named in its chunk.",
+  "sources": [
+    {
+      "document_path": "fixtures/source_documents/cisco-2025.pdf",
+      "original_filename": "6c821d1a-cf4e-4310-9801-df9399aa701b.pdf",
+      "sha256": "67c12b7559d5cbd301265603e41e49011a583ff233c6d811d411b23f1625d003",
+      "physical_pages": [
+        13
+      ]
+    },
+    {
+      "document_path": "fixtures/source_documents/sofi-2024.pdf",
+      "original_filename": "SOFI-2024.pdf",
+      "sha256": "00752f3c65b803c13412f5075069f3c0e73da2e6e5cd38e225c4379bc9966b4a",
+      "physical_pages": [
+        24,
+        25
+      ]
+    }
+  ]
+}

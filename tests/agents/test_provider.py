@@ -3,7 +3,14 @@ import json
 import httpx
 import pytest
 
-from consulting_platform.agents.llm import HostedLLMClient
+from consulting_platform.agents.llm import (
+    HostedLLMClient,
+    RequestBudget,
+    cohere_schema,
+    generate,
+    restore_cohere_maps,
+)
+from consulting_platform.agents.models import RoutePlan, SpecialistAnalysis
 from consulting_platform.config import Settings
 from consulting_platform.contracts import (
     ServiceUnavailableError,
@@ -108,3 +115,137 @@ async def test_truncation_is_not_treated_as_valid_output():
                 ),
             )
         )
+
+
+@pytest.mark.parametrize("always_truncate,call_limit", [(False, 12), (True, 12), (True, 1)])
+async def test_truncation_recovery_is_bounded_and_increases_output_budget(
+    always_truncate, call_limit
+):
+    limits = []
+
+    def handler(request):
+        limits.append(json.loads(request.content)["max_tokens"])
+        return httpx.Response(
+            200,
+            json={
+                "finish_reason": "max_tokens"
+                if always_truncate or len(limits) == 1
+                else "COMPLETE",
+                # Even complete-looking JSON must be discarded on a truncation stop.
+                "message": {"content": [{"type": "text", "text": '{"tasks": {}}'}]},
+            },
+        )
+
+    client = HostedLLMClient(
+        Settings(api_key="test-only", requests_per_minute=1000),
+        transport=httpx.MockTransport(handler),
+    )
+    budget = RequestBudget(limit=call_limit)
+    if always_truncate:
+        with pytest.raises(UpstreamModelError, match="router.*finish_reason=MAX_TOKENS"):
+            await generate(client, budget, RoutePlan, role="router", system="JSON", payload={})
+    else:
+        result = await generate(client, budget, RoutePlan, role="router", system="JSON", payload={})
+        assert result.tasks == {}
+    assert limits == ([4000] if call_limit == 1 else [4000, 8000])
+    assert budget.calls == len(limits)
+    assert budget.repair_used == (call_limit != 1)
+
+
+@pytest.mark.parametrize(
+    "reason,error", [("ERROR", UpstreamModelError), ("TIMEOUT", UpstreamTimeoutError)]
+)
+async def test_provider_stop_errors_are_not_retried_as_truncation(reason, error):
+    client = HostedLLMClient(
+        Settings(api_key="test-only"),
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(200, json={"finish_reason": reason})
+        ),
+    )
+    budget = RequestBudget()
+    with pytest.raises(error):
+        await generate(client, budget, RoutePlan, role="router", system="JSON", payload={})
+    assert budget.calls == 1 and not budget.repair_used
+
+
+def test_cohere_wire_schema_encodes_dynamic_maps_as_fixed_records():
+    schema = cohere_schema(RoutePlan.model_json_schema())
+    tasks = schema["properties"]["tasks"]
+    assert tasks["type"] == "array"
+    assert tasks["items"]["required"] == ["key", "value"]
+    assert "minimum" not in str(schema) and "default" not in str(schema)
+    assert "tasks" in schema["required"]
+
+
+def test_cohere_wire_decode_recurses_through_nested_candidate_attributes():
+    value = {
+        "findings": [],
+        "candidates": [
+            {
+                "id": "a",
+                "label": "A",
+                "identity_supports": [{"evidence_id": "e1", "quote": "A has 6 ports."}],
+                "attributes": [
+                    {
+                        "key": "port_count",
+                        "value": {
+                            "value": 6,
+                            "unit": "ports",
+                            "supports": [{"evidence_id": "e1", "quote": "A has 6 ports."}],
+                        },
+                    }
+                ],
+            }
+        ],
+        "actions": [],
+        "clarification_questions": [],
+        "follow_up_query": None,
+        "limitations": [],
+    }
+    decoded = restore_cohere_maps(value, SpecialistAnalysis.model_json_schema())
+    result = SpecialistAnalysis.model_validate(decoded)
+    assert result.candidates[0].attributes["port_count"].value == 6
+
+
+def test_cohere_wire_duplicate_map_keys_cannot_silently_overwrite():
+    with pytest.raises(TypeError, match="duplicate"):
+        restore_cohere_maps(
+            {"tasks": [{"key": "sec", "value": {}}, {"key": "sec", "value": {}}]},
+            RoutePlan.model_json_schema(),
+        )
+
+
+def test_schema_property_names_are_not_removed_as_annotations():
+    schema = cohere_schema(
+        {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string", "title": "Display name", "maxLength": 20},
+            },
+            "required": ["title"],
+        }
+    )
+    assert schema["properties"]["title"] == {"type": "string"}
+
+
+async def test_cohere_uses_server_schema_and_restores_canonical_map():
+    def handler(request):
+        body = json.loads(request.content)
+        assert body["response_format"]["schema"]["properties"]["tasks"]["type"] == "array"
+        return httpx.Response(
+            200,
+            json={
+                "finish_reason": "COMPLETE",
+                "message": {
+                    "content": [
+                        {"type": "text", "text": '{"tasks": [], "clarification_questions": []}'},
+                    ]
+                },
+            },
+        )
+
+    client = HostedLLMClient(Settings(api_key="test-only"), transport=httpx.MockTransport(handler))
+    result = await client.generate_json(
+        role="router", system="JSON", payload={}, schema=RoutePlan.model_json_schema()
+    )
+    assert result == {"tasks": {}, "clarification_questions": []}

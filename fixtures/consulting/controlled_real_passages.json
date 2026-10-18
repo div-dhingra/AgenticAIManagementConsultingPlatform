@@ -1,0 +1,58 @@
+{
+  "provenance": "real_source_passages",
+  "description": "Preselected passages for live-model checks. Real document metadata and text, with a small factual table transcribed from Cisco's datasheet. Selection is manual, not semantic retrieval. See docs/CONTROLLED_TESTS.md for provenance and expected checks.",
+  "chunks": [
+    {
+      "chunk_id": "controlled-cisco-8300-p6-ports",
+      "document_id": "cisco-catalyst-8300-datasheet",
+      "text": "Model | 10G port density | 1G port density\nC8300-2N2S-4T2X | 2 | 4\nC8300-2N2S-6T | - | 6",
+      "title": "Cisco Catalyst 8300 Series Edge Platforms Data Sheet, Table 2 (selected columns)",
+      "domain": "technology",
+      "company": "Cisco",
+      "report_year": null,
+      "source_uri": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8300-series-edge-platforms/datasheet-c78-744088.pdf",
+      "page": 6,
+      "printed_page": "6",
+      "retrieval_score": 1.0
+    },
+    {
+      "chunk_id": "controlled-cisco-10k-fy2025-p13",
+      "document_id": "cisco-10k-fy2025",
+      "text": "Our operations can be difficult to predict because our operating results may fluctuate in future periods.\nOur operating results have been in the past, and will continue to be, subject to quarterly and annual fluctuations as a result of numerous factors, some of which\nmay contribute to more pronounced fluctuations in an uncertain global economic environment. These factors include:\n\u2022 Fluctuations in demand for our products and services, especially with respect to service providers and Internet businesses, in part due to changes in\nthe global economic environment\n\u2022 Changes in sales and implementation cycles for our products and reduced visibility into our customers\u2019 spending plans and associated revenue\n\u2022 Our ability to maintain appropriate inventory levels and purchase commitments\n\u2022 Price and product competition in the communications and networking industries, which can change rapidly due to technological innovation and\ndifferent business models from various geographic regions",
+      "title": "Cisco Systems, Inc. Form 10-K, fiscal 2025, Item 1A Risk Factors",
+      "domain": "sec",
+      "company": "Cisco",
+      "report_year": 2025,
+      "source_uri": "fixtures/source_documents/cisco-2025.pdf",
+      "page": 13,
+      "printed_page": "11",
+      "retrieval_score": 1.0
+    },
+    {
+      "chunk_id": "controlled-sofi-2024-p24",
+      "document_id": "sofi-2024",
+      "text": "To generate a framework for increased financing\nand improved finance targeting, it is imperative\nto gain an understanding of the major drivers\nof food insecurity and malnutrition, and of the\ncountries affected by these major drivers. In\nthe last ten years, the frequency and intensity\nof conflict, climate extremes and economic\ndownturns have increased, undermining\nfood security and nutrition around the world.\nFurthermore, high levels of income inequality\nexacerbate the effects of these drivers.",
+      "title": "The State of Food Security and Nutrition in the World 2024",
+      "domain": "corporate_responsibility",
+      "company": null,
+      "report_year": 2024,
+      "source_uri": "fixtures/source_documents/sofi-2024.pdf",
+      "page": 24,
+      "printed_page": "xxii",
+      "retrieval_score": 1.0
+    },
+    {
+      "chunk_id": "controlled-sofi-2024-p25",
+      "document_id": "sofi-2024",
+      "text": "Data to apply the new definition of financing\nfor food security and nutrition exist only\nfor some of the financing flows; hence, it\nis not possible to take a realistic stock of\nhow much financing is available, let alone\ncalculate the financing gap to support efforts\nto meet SDG Targets 2.1 and 2.2. Therefore,\ndata sources and methodologies must be\nadvanced to ensure there are better data for\nevidence-based decisions on financing for food\nsecurity and nutrition. This report thus also\ncalls for universal adoption and transparency\nin the use of a standardized approach for\noperationalizing the new definition in its\nmapping and application to financial data.",
+      "title": "The State of Food Security and Nutrition in the World 2024",
+      "domain": "corporate_responsibility",
+      "company": null,
+      "report_year": 2024,
+      "source_uri": "fixtures/source_documents/sofi-2024.pdf",
+      "page": 25,
+      "printed_page": "xxiii",
+      "retrieval_score": 1.0
+    }
+  ]
+}

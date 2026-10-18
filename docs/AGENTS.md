@@ -41,7 +41,21 @@ There is no silent model/provider downgrade. A service instance shares one paced
 provider adapter across its graphs; multiple worker processes/machines need their
 own coordinated rate policy for the same API key.
 
-Once the KB teammate supplies a factory:
+Before the full KB is available, you can already test real-model routing,
+extraction/ranking, and citation behavior using selected real passages:
+
+```bash
+.venv/bin/consult ask --mode live \
+  --evidence-file fixtures/consulting/controlled_real_passages.json \
+  --question 'What operational risks does Cisco disclose in its 2025 filing?' \
+  --context-json '{"company":"Cisco","report_years":[2025]}'
+```
+
+See [CONTROLLED_TESTS.md](CONTROLLED_TESTS.md) for real-source provenance,
+candidate-ranking checks, and the distinction from full retrieval evaluation.
+The response warns that this is controlled evidence; it is not the fake demo.
+
+Once the KB teammate supplies a factory, test full retrieval integration:
 
 ```bash
 .venv/bin/consult ask --mode live \
@@ -152,10 +166,27 @@ The candidate ranker is not an exhaustive product catalog or an unrestricted
 procurement system. Start with a few supported equipment comparisons and grow
 coverage using real source tests.
 
+PDF quote validation tolerates line-wrap whitespace and straight/curly quotation
+glyph differences only. It recovers and stores the original source substring,
+including its original punctuation. Changed words, quantities, dashes, invented
+IDs, and spliced/elliptical quotes remain invalid. Rejection warnings identify
+the category without logging raw model output.
+
+Cohere requests use a provider-compatible JSON Schema. Dynamic dictionaries are
+encoded internally as key/value records and decoded back into the same canonical
+Python models; public API/KB contracts do not change. The adapter can discard
+surrounding prose/fences and one exact model-name wrapper before full validation.
+It never repairs incomplete JSON or invents fields/values. Model prose is not
+returned or logged. A bounded repair request receives field paths/error types;
+final errors identify the failing role without exposing provider bodies. A
+`MAX_TOKENS` stop discards the incomplete output and can use the same single
+repair allowance for a fresh, compact response with twice the output budget
+(capped at 8,000 tokens). Error messages include the stop reason and token limit.
+
 ## Bounds and failure handling
 
-- At most 12 model calls per request, including at most one global JSON-repair
-  attempt. No hidden transport retries. A process-local limiter defaults to
+- At most 12 model calls per request, including at most one global JSON/truncation
+  repair attempt shared across all roles. No hidden transport retries. A process-local limiter defaults to
   18 requests/minute. Provider throttling is an availability error, not fake output.
 - At most two retrieval rounds per specialist and one manager follow-up per
   request. Selected domains are isolated before merge.

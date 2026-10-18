@@ -34,8 +34,14 @@ def main():
     run.add_argument("--request-json", type=Path)
     run.add_argument("--context-json", default="{}")
     run.add_argument("--mode", choices=["live", "demo"])
-    run.add_argument(
+    knowledge_source = run.add_mutually_exclusive_group()
+    knowledge_source.add_argument(
         "--knowledge-factory", help="Trusted local module:factory from the KB teammate"
+    )
+    knowledge_source.add_argument(
+        "--evidence-file",
+        type=Path,
+        help="Explicit real-passage JSON for live-model tests without the full KB",
     )
     graph = sub.add_parser("graphs")
     graph.add_argument("--output-dir", type=Path, default=Path("docs/graphs"))
@@ -54,6 +60,10 @@ def main():
     settings = Settings.from_env()
     if args.mode:
         settings.mode = args.mode
+    if args.evidence_file and settings.mode != "live":
+        parser.error(
+            "--evidence-file requires --mode live; it uses real model calls and real passages."
+        )
     if args.request_json:
         request = ConsultRequest.model_validate_json(args.request_json.read_text())
     elif args.question:
@@ -64,6 +74,10 @@ def main():
         parser.error("Supply --question or --request-json.")
     try:
         knowledge = load_factory(args.knowledge_factory) if args.knowledge_factory else None
+        if args.evidence_file:
+            from consulting_platform.agents.controlled_evidence import ControlledEvidenceService
+
+            knowledge = ControlledEvidenceService.from_file(args.evidence_file)
         service = create_consulting_service(knowledge, settings=settings)
         result = asyncio.run(service.run_consultation(request, request_id=str(uuid4())))
     except (ServiceUnavailableError, UpstreamTimeoutError, UpstreamModelError) as exc:
