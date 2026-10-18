@@ -1,0 +1,12 @@
+flowchart LR
+    DOC[Authoritative PDFs / retrieved product pages] --> EX[Extract document text + citation metadata]
+    EX --> CH[Chunk text with stable IDs + document/page/company/year]
+    CH --> EM[Offline CPU embeddings + TF-IDF build]
+    EM --> IX[(Local index)]
+    Q[Domain subquestions + strict metadata filters] --> SEARCH[Hybrid search + optional adjacent passages]
+    IX --> SEARCH
+    SEARCH --> SP[Exact quote spans with IDs]
+    SP --> GEN[Specialist extraction]
+    GEN --> VAL[Literal + semantic evidence validation]
+    VAL --> OUT[Answer with linked source / indexed document + page]
+    NO[Source URLs identify provenance; agents do not browse links at answer time] -.-> SEARCH

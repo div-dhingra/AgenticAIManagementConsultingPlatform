@@ -1,8 +1,7 @@
-
 from consulting_platform.knowledge.sections import (
-    detect_section_heading,
-    detect_section_boundary,
     assign_sections,
+    detect_section_boundary,
+    detect_section_heading,
 )
 
 
@@ -132,3 +131,19 @@ def test_original_chunks_are_not_modified():
 
     assert "section" not in chunks[0]
     assert result[0]["section"] == "item_1a"
+
+
+def test_embedded_isolated_risk_heading_starts_section_and_ignores_contents_rows():
+    chunks = [
+        make_chunk(
+            "agilent",
+            "sec",
+            "Investor information and prior paragraph.\nItem 1A. Risk Factors\nBusiness and Strategic Risks\nGeneral economic conditions may adversely affect our business.",
+        ),
+        make_chunk("agilent", "sec", "Demand fluctuations can affect our results."),
+    ]
+    assert [c["section"] for c in assign_sections(chunks)] == ["item_1a", "item_1a"]
+    assert (
+        detect_section_heading("Contents\nItem 1A. Risk Factors 18\nItem 1C. Cybersecurity 31")
+        is None
+    )

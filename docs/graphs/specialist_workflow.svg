@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 780" role="img" aria-label="Individual specialist workflow">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#52647b"/></marker></defs>
+<rect width="1400" height="780" fill="#f6f8fc"/>
+<text x="45" y="52" fill="#152840" font-family="Arial,sans-serif" font-size="29" font-weight="bold">Individual specialist workflow</text>
+<text x="45" y="86" fill="#52647b" font-family="Arial,sans-serif" font-size="17">Each of the four domain agents has its own state and policy, using the same four graph nodes.</text>
+<polyline points="290,210.0 370,210.0" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="630,210.0 720,210.0" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="980,210.0 1080,210.0" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1210.0,260 1210.0,307.5 1210.0,307.5 1210.0,355" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1080,405.0 980,405.0" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="500.0,355 500.0,307.5 500.0,307.5 500.0,260" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="509.0" y="299.5" fill="#52647b" font-family="Arial,sans-serif" font-size="15">retrieve</text>
+<polyline points="675.0,560 675.0,410.0 850.0,410.0 850.0,260" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="859.0" y="402.0" fill="#52647b" font-family="Arial,sans-serif" font-size="15">domain policy</text>
+<rect x="50" y="160" width="240" height="100" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="170.0" y="198.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Domain task + customer</text>
+<text x="170.0" y="222.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">context</text>
+<rect x="370" y="160" width="260" height="100" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="500.0" y="186.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">1. Retrieve</text>
+<text x="500.0" y="210.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Focused searches + hard</text>
+<text x="500.0" y="234.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">filters</text>
+<rect x="720" y="160" width="260" height="100" rx="12" fill="#e9e2ff" stroke="#7352b4" stroke-width="1.7"/>
+<text x="850.0" y="186.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">2. Analyze / extract</text>
+<text x="850.0" y="210.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">LLM facts, candidates,</text>
+<text x="850.0" y="234.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">actions</text>
+<rect x="1080" y="160" width="260" height="100" rx="12" fill="#fff0d5" stroke="#b87a19" stroke-width="1.7"/>
+<text x="1210.0" y="186.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">3. Validate evidence</text>
+<text x="1210.0" y="210.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Exact spans, units,</text>
+<text x="1210.0" y="234.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">identities</text>
+<rect x="1080" y="355" width="260" height="100" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="1210.0" y="393.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">4. Rank candidates</text>
+<text x="1210.0" y="417.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Deterministic comparison</text>
+<rect x="720" y="355" width="260" height="100" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="850.0" y="393.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Return grounded result</text>
+<text x="850.0" y="417.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Manager reviews it next</text>
+<rect x="370" y="355" width="260" height="100" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="500.0" y="393.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">KnowledgeService</text>
+<text x="500.0" y="417.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Stored document passages</text>
+<rect x="370" y="560" width="610" height="100" rx="12" fill="#fff0d5" stroke="#b87a19" stroke-width="1.7"/>
+<text x="675.0" y="574.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Technology: fault and compatibility checks</text>
+<text x="675.0" y="598.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Clinical: laboratory evidence</text>
+<text x="675.0" y="622.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">SEC: company / year / risk</text>
+<text x="675.0" y="646.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">CSR: documented priorities vs hypotheses</text>
+<text x="45" y="750" fill="#52647b" font-family="Arial,sans-serif" font-size="16">Purple: model step · Blue: application code · Green: data/service · Amber: checks and decisions</text></svg>

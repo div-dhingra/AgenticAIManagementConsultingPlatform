@@ -8,19 +8,21 @@ from __future__ import annotations
 import streamlit as st
 import streamlit.components.v1 as components
 
+from consulting_platform.examples import CROSS_DOMAIN_QUESTION, EXAMPLES, example_form_values
 from consulting_platform.ui import client, retail_view
-
-CROSS_DOMAIN_PRESET = (
-    "We run a hospital network with diabetes research labs and plan to standardize the lab sites on a Cisco "
-    "edge router. Which Catalyst 8200 or 8300 model fits, what risks do Cisco's and Agilent's latest 10-K "
-    "filings highlight, and how could this investment support nutrition and food-security goals?"
+from consulting_platform.ui.consulting_view import (
+    citation_title,
+    diagnostic_warning,
+    readable_rationale,
 )
+
+CROSS_DOMAIN_PRESET = CROSS_DOMAIN_QUESTION
 DEMO_PRESET = "Which fixture analyzer supports at least 12 samples per run?"
 
 STATUS_STYLE = {
     "answered": ("green", "Answered", None),
-    "partial": ("orange", "Partial answer", "Part of the requested scope is not covered by the sources."),
-    "needs_clarification": ("blue", "Needs clarification", "Answer the questions below and ask again."),
+    "partial": ("orange", "Partial answer", "Some requested parts remain unresolved; the answer below identifies them."),
+    "needs_clarification": ("blue", "Needs clarification", "Add the requested details to your question or optional context, then click Ask again. Each submission uses the inputs currently shown."),
     "insufficient_evidence": ("red", "Insufficient evidence", "The sources do not support an answer. Do not treat this as procurement guidance."),
 }
 DOMAIN_LABELS = {
@@ -114,6 +116,22 @@ def set_question(text: str) -> None:
     st.session_state.question = text
 
 
+def set_example(case_id: str) -> None:
+    st.session_state.update(example_form_values(case_id))
+
+
+def set_controlled_example(question: str, company: str, years: str, requirements: str) -> None:
+    st.session_state.update(
+        question=question,
+        ctx_company=company,
+        ctx_years=years,
+        ctx_requirements=requirements,
+        ctx_model="",
+        ctx_symptoms="",
+        ctx_region="",
+    )
+
+
 def lines(text: str) -> list[str]:
     return [line.strip() for line in text.splitlines() if line.strip()]
 
@@ -146,10 +164,13 @@ def render_consult(data: dict) -> None:
     st.markdown(f"### :{color}[{label}]")
     st.caption(f"Domains: {domains}")
     if note:
+        if data["status"] == "needs_clarification" and data["summary"].startswith("**Do not order replacement parts yet."):
+            note = "The diagnostic plan below answers what you can do now. Selecting a replacement part still requires the exact router SKU and fault evidence listed below."
         st.info(note)
-    st.write(data["summary"])
+    st.markdown(data["summary"])
     for warning in data["warnings"]:
-        st.warning(warning)
+        if not diagnostic_warning(warning):
+            st.warning(warning)
 
     if data["clarification_questions"]:
         st.markdown("**Questions we need answered**")
@@ -166,43 +187,64 @@ def render_consult(data: dict) -> None:
     for rec in data["recommendations"]:
         with st.container(border=True):
             st.markdown(f"**{rec['rank']}. {rec['title']}** {refs(rec['evidence_ids'])}")
-            st.caption(f"{rec['kind'].replace('_', ' ')} · priority {rec['priority']} · {rec['assessment']}")
+            assessment = {"supported": "Supported by sources", "conditional": "Needs verification", "proposed": "Suggested action"}[rec["assessment"]]
+            st.caption(f"{assessment} · {rec['priority'].capitalize()} priority")
             if rec["assessment"] == "conditional":
                 st.caption("Conditional: depends on the prerequisites below being met.")
             elif rec["assessment"] == "proposed":
                 st.caption("Proposed action motivated by the evidence; its impact is not proven by the sources.")
-            st.write(rec["rationale"])
-            for title, items in (("Prerequisites", rec["prerequisites"]), ("Next steps", rec["next_steps"]), ("Proposed success measures", rec["success_metrics"])):
+            st.write(readable_rationale(rec["rationale"]))
+            for title, items in (("Before you proceed", rec["prerequisites"]), ("Next steps", rec["next_steps"])):
                 if items:
                     st.markdown(f"*{title}*")
                     for item in items:
                         st.markdown(f"- {item}")
+            if rec["success_metrics"]:
+                with st.expander("How to evaluate this recommendation"):
+                    for item in rec["success_metrics"]:
+                        st.markdown(f"- {item}")
 
     if data["findings"]:
-        st.markdown("#### Findings")
-        for finding in data["findings"]:
-            tag = "supported" if finding["assessment"] == "supported" else "inference"
-            st.markdown(f"- {finding['statement']} *({tag}, {DOMAIN_LABELS[finding['domain']]})* {refs(finding['evidence_ids'])}")
+        with st.expander("Validated findings by specialist"):
+            for finding in data["findings"]:
+                tag = "supported" if finding["assessment"] == "supported" else "inference"
+                st.markdown(f"- {finding['statement']} *({tag}, {DOMAIN_LABELS[finding['domain']]})* {refs(finding['evidence_ids'])}")
 
     if data["citations"]:
-        st.markdown("#### Evidence")
-        for i, c in enumerate(data["citations"], start=1):
-            page = f"p. {c['page']}" if c["page"] else "page n/a"
-            if c["printed_page"]:
-                page += f" (printed {c['printed_page']})"
-            meta = " · ".join(str(x) for x in (c["company"], c["report_year"], page) if x)
-            st.markdown(f"**[{i}] {c['title']}** — {meta}")
-            st.caption(f"> {c['excerpt']}")
-            st.caption(f"Source: {c['source_uri']}")
+        with st.expander(f"Sources and quoted passages ({len(data['citations'])})"):
+            st.markdown("#### Evidence")
+            for i, c in enumerate(data["citations"], start=1):
+                page = f"p. {c['page']}" if c["page"] else "page n/a"
+                if c["printed_page"]:
+                    page += f" (printed {c['printed_page']})"
+                meta = " · ".join(str(x) for x in (c["company"], c["report_year"], page) if x)
+                title = citation_title(c)
+                uri = c["source_uri"]
+                label = f"[{title}]({uri})" if uri.startswith(("https://", "http://")) else title
+                st.markdown(f"**[{i}] {label}** — {meta}")
+                st.caption(f"> {c['excerpt']}")
+                if not uri.startswith(("https://", "http://")):
+                    st.caption("Indexed source document; page reference shown above.")
 
     level = data["uncertainty"]["level"]
-    st.markdown(f"#### Evidence strength: uncertainty **{level}**")
+    st.markdown(f"#### Uncertainty: **{level}**")
     for reason in data["uncertainty"]["reasons"]:
         st.markdown(f"- {reason}")
 
+    diagnostic_events = [t for t in data["trace"] if t["detail"].startswith(("Specialist diagnostic:", "Review diagnostic:"))]
+    diagnostic_warnings = [w for w in data["warnings"] if diagnostic_warning(w)]
+    if diagnostic_events or diagnostic_warnings:
+        with st.expander("Evidence checks and specialist notes"):
+            st.caption("Diagnostics describe model extraction and review. Source availability is reported in the answer above.")
+            for event in diagnostic_events:
+                domain = DOMAIN_LABELS.get(event["domain"], "Manager review")
+                st.write(f"{domain}: {event['detail']}")
+            for warning in diagnostic_warnings:
+                st.write(warning)
+
     with st.expander("Operational trace"):
         st.dataframe(
-            [{"Step": t["step"], "Domain": t["domain"] or "—", "Status": t["status"], "Detail": t["detail"]} for t in data["trace"]],
+            [{"Step": t["step"], "Domain": t["domain"] or "—", "Status": t["status"], "Detail": t["detail"]} for t in data["trace"] if t not in diagnostic_events],
             hide_index=True,
             use_container_width=True,
         )
@@ -210,8 +252,29 @@ def render_consult(data: dict) -> None:
 
 
 with consult_tab:
+    st.caption("Compare equipment against your requirements, understand company risks, and explore food-security priorities using cited documents.")
+    controlled = health.ok and any(
+        w.startswith("Controlled evidence test:") for w in health.data["warnings"]
+    )
+    if controlled:
+        st.warning("Live test on selected real passages. This uses your model API; full-document search and coverage are not being tested.")
+        examples = st.columns(3)
+        for column, label, args in [
+            (examples[0], "Cisco risks (2025)", ("What operational risks does Cisco disclose in its 2025 filing?", "Cisco", "2025", "")),
+            (examples[1], "Compare router ports", ("Compare Cisco C8300-2N2S-4T2X and C8300-2N2S-6T for at least 5 1G Ethernet ports.", "Cisco", "", "At least 5 1G Ethernet ports")),
+            (examples[2], "SOFI financing (2024)", ("According to SOFI 2024, can the report calculate the financing gap, and what measurement improvements are needed?", "", "2024", "")),
+        ]:
+            column.button(label, on_click=set_controlled_example, args=args)
+    elif health_mode != "demo":
+        columns = st.columns(3)
+        for index, case_id in enumerate(("cisco_ports", "cisco_risks", "sofi_priorities", "clinical_overview", "router_diagnostics")):
+            columns[index % 3].button(EXAMPLES[case_id]["label"], on_click=set_example, args=(case_id,), help=EXAMPLES[case_id].get("help"))
     presets = st.columns([1, 1, 4])
-    presets[0].button("Cross-domain example", on_click=set_question, args=(CROSS_DOMAIN_PRESET,))
+    presets[0].button(
+        "Cross-domain example",
+        on_click=set_example,
+        args=("cross_domain",),
+    )
     if health_mode == "demo":
         presets[1].button("Demo fixture question", on_click=set_question, args=(DEMO_PRESET,))
 
@@ -241,6 +304,9 @@ with consult_tab:
         question, context, max_recs = st.session_state.consult_pending
         with st.spinner("Routing to specialist agents and checking evidence (up to ~90 s)…"):
             st.session_state.consult_result = client.consult(question, context, max_recs)
+        if not st.session_state.consult_result.ok and st.session_state.consult_result.status_code is None:
+            # Cached green readiness must not survive a lost backend connection.
+            refresh_health()
         st.session_state.consult_pending = None
         st.session_state.consult_busy = False
         st.rerun()

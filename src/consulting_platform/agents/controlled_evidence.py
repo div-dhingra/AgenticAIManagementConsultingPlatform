@@ -1,7 +1,7 @@
 """Preselected real passages for live-model tests, independent of the full KB.
 
 This is a controlled context provider, not a semantic search implementation.
-It is selected explicitly by CLI developers and never used as an outage fallback.
+It is selected explicitly at CLI/API startup and never used as an outage fallback.
 """
 
 from pathlib import Path
@@ -42,6 +42,8 @@ class ControlledEvidenceSet(ContractModel):
 
 class ControlledEvidenceService:
     """Filter developer-selected passages; preserve order, without query scoring."""
+
+    supports_query_refinement = False
 
     def __init__(self, evidence: ControlledEvidenceSet):
         self.evidence = evidence

@@ -86,9 +86,9 @@ async def test_graph_accepts_real_passages_and_preserves_test_warning_without_ne
         ConsultRequest(question="What risks does Cisco disclose in its 2025 filing?"),
         request_id=str(uuid4()),
     )
-    assert result.mode == "live" and result.status == "partial"
+    assert result.mode == "live" and result.status == "answered"
     assert NOTICE in result.warnings
-    assert result.citations[0].page == 13 and result.findings[0].statement == quote
+    assert result.citations[0].page == 13 and quote in result.findings[0].statement
 
 
 def test_cli_forbids_using_real_evidence_file_with_fake_demo_model(monkeypatch):

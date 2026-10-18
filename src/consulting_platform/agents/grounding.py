@@ -2,6 +2,7 @@
 
 import re
 
+from consulting_platform.agents.evidence_spans import evidence_spans
 from consulting_platform.agents.models import Candidate, SpecialistAnalysis, Support
 from consulting_platform.contracts import Domain, EvidenceChunk, RetrievalFilters
 
@@ -60,6 +61,15 @@ def resolve_supports(
         if chunk is None:
             return [], "unknown evidence ID"
         quote = support.quote.strip()
+        if support.span_id is not None:
+            span = next(
+                (s for s in evidence_spans(chunk.text) if s["span_id"] == support.span_id), None
+            )
+            if span is None:
+                return [], "unknown source span ID"
+            if quote and " ".join(quote.split()) != " ".join(span["quote"].split()):
+                return [], "quote disagrees with referenced source span"
+            quote = span["quote"]
         if not quote:
             return [], "empty evidence quote"
         if quote in chunk.text:
@@ -77,7 +87,7 @@ def resolve_supports(
             original = match.group(0)
         if len(original) > 400:
             return [], "source quote exceeds 400 characters; use a shorter excerpt"
-        resolved.append(support.model_copy(update={"quote": original}))
+        resolved.append(support.model_copy(update={"quote": original, "span_id": None}))
     return resolved, None
 
 
@@ -113,6 +123,56 @@ def _unit_in_quotes(unit: str | None, supports: list[Support]) -> bool:
     )
 
 
+def _table_port_supports(candidate, name, fact, supports, registry):
+    """Verify a speed-specific count against its actual table cell and header.
+
+    This is deterministic extraction from a retrieved table, not quote repair.
+    A model may cite the full row but omit the header needed to interpret it.
+    """
+    speed = re.search(r"(?<![a-z0-9])(\d+(?:\.\d+)?[gm])(?![a-z0-9])", name, re.I)
+    if not speed or "port" not in name.casefold():
+        return supports, None, False
+    for support in supports:
+        chunk = registry[support.evidence_id]
+        lines = [line for line in chunk.text.splitlines() if "|" in line]
+        for header in lines:
+            cells = [c.strip() for c in header.split("|")]
+            if cells[0].casefold() not in {"model", "product", "instrument"}:
+                continue
+            columns = [
+                i
+                for i, c in enumerate(cells)
+                if "port" in c.casefold()
+                and re.search(r"(?<![a-z0-9])" + re.escape(speed[1]) + r"(?![a-z0-9])", c, re.I)
+            ]
+            rows = [
+                line
+                for line in lines
+                if line.split("|")[0].strip() == candidate.label
+                and " ".join(line.split()) in " ".join(support.quote.split())
+            ]
+            if len(columns) != 1 or len(rows) != 1:
+                continue
+            row_cells = [c.strip() for c in rows[0].split("|")]
+            column = columns[0]
+            if len(row_cells) != len(cells):
+                return supports, "ambiguous source table layout", True
+            try:
+                valid = not isinstance(fact.value, bool) and float(row_cells[column]) == float(
+                    fact.value
+                )
+            except (ValueError, TypeError):
+                valid = False
+            if not valid:
+                return supports, "source table column does not support the attribute value", True
+            if not any(
+                s.evidence_id == support.evidence_id and s.quote == header for s in supports
+            ):
+                supports = [*supports, support.model_copy(update={"quote": header})]
+            return supports, None, True
+    return supports, None, False
+
+
 def grounded_candidates(
     candidates: list[Candidate],
     registry: dict[str, EvidenceChunk],
@@ -135,15 +195,83 @@ def grounded_candidates(
         attributes = {}
         for name, fact in candidate.attributes.items():
             supports, issue = resolve_supports(fact.supports, registry)
+            if issue:
+                # A table header plus a nonadjacent model row must become TWO
+                # verbatim supports, never an invented contiguous quotation.
+                expanded = []
+                for support in fact.supports:
+                    chunk = registry.get(support.evidence_id)
+                    lines = chunk.text.splitlines() if chunk else []
+                    headers = [
+                        line
+                        for line in lines
+                        if "|" in line
+                        and line.split("|")[0].strip().casefold()
+                        in {"model", "product", "instrument"}
+                    ]
+                    rows = [
+                        line
+                        for line in lines
+                        if "|" in line and line.split("|")[0].strip() == candidate.label
+                    ]
+                    pair = next(
+                        (
+                            (h, r)
+                            for h in headers
+                            for r in rows
+                            if " ".join(support.quote.split()) == " ".join(f"{h} {r}".split())
+                        ),
+                        None,
+                    )
+                    expanded.extend(
+                        [support.model_copy(update={"quote": q}) for q in pair]
+                        if pair
+                        else [support]
+                    )
+                supports, issue = resolve_supports(expanded, registry)
+            if not issue and any("|" in s.quote for s in supports):
+                rows = [
+                    line
+                    for s in supports
+                    for line in registry[s.evidence_id].text.splitlines()
+                    if "|" in line and line.split("|")[0].strip() == candidate.label
+                ]
+                if rows and not any(
+                    " ".join(row.split()) in " ".join(s.quote.split())
+                    for row in rows
+                    for s in supports
+                ):
+                    issue = "table attribute does not cite this candidate's row"
+            table_verified = False
+            if not issue:
+                supports, table_issue, table_verified = _table_port_supports(
+                    candidate, name, fact, supports, registry
+                )
+                issue = table_issue
+            # A speed-qualified count unit is redundant only if the same speed
+            # remains explicit in the attribute key. No rate/count conversion.
+            unit = "ports" if table_verified and not issue else fact.unit
+            speed_unit = re.fullmatch(
+                r"(\d+(?:\.\d+)?[gm])\s+(?:ethernet\s+)?ports?", unit or "", re.I
+            )
+            if speed_unit and re.search(
+                r"(?<![a-z0-9])" + re.escape(speed_unit[1]) + r"(?![a-z0-9])", name, re.I
+            ):
+                unit = "ports"
             if (
                 not issue
                 and _value_in_quotes(fact.value, supports)
-                and _unit_in_quotes(fact.unit, supports)
+                and _unit_in_quotes(unit, supports)
             ):
-                attributes[name] = fact.model_copy(update={"supports": supports})
+                attributes[name] = fact.model_copy(update={"supports": supports, "unit": unit})
             else:
+                reason = issue or (
+                    "attribute value absent from quotes"
+                    if not _value_in_quotes(fact.value, supports)
+                    else "attribute unit absent from quotes"
+                )
                 warnings.append(
-                    f"Removed unsupported attribute {name} from candidate {candidate.id}."
+                    f"Removed unsupported attribute {name} from candidate {candidate.id}. Reason: {reason}."
                 )
         accepted.append(
             candidate.model_copy(
@@ -165,6 +293,39 @@ def ground_analysis(
     for items, output in [(analysis.findings, findings), (analysis.actions, actions)]:
         for item in items:
             supports, issue = resolve_supports(item.supports, registry)
+            if not issue:
+                statement = getattr(item, "statement", getattr(item, "rationale", ""))
+                source = " ".join(
+                    " ".join(
+                        registry[e].text for e in dict.fromkeys(s.evidence_id for s in supports)
+                    ).split()
+                )
+                # A combined financial measure cannot be assigned to one of its
+                # components. No amount or company is hard-coded here.
+                amounts = re.findall(r"\$?\s*\d[\d,.]*\s*(?:million|billion)", statement, re.I)
+                for amount in amounts:
+                    pattern = re.escape(amount.strip()).replace(r"\ ", r"\s+")
+                    if (
+                        re.search(pattern, source, re.I)
+                        and re.search(
+                            r"inventory\s+provisions|provisions\s+for\s+inventory", source, re.I
+                        )
+                        and re.search(
+                            r"purchase.commitment.*liabilit|liabilit.*purchase.commitment",
+                            source,
+                            re.I,
+                        )
+                        and re.search(
+                            r"purchase.commitment.*liabilit|liabilit.*purchase.commitment",
+                            statement,
+                            re.I,
+                        )
+                        and not re.search(
+                            r"inventory\s+provisions|provisions\s+for\s+inventory", statement, re.I
+                        )
+                    ):
+                        issue = "combined financial measure mislabeled as a standalone liability"
+                        break
             if issue:
                 rejected.append(issue)
             else:

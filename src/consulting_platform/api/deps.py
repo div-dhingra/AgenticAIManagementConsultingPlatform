@@ -62,15 +62,39 @@ def build_services(settings: ApiSettings) -> Services:
 
     knowledge = None
     try:
-        knowledge = _load_knowledge()
+        if settings.controlled_evidence_file is not None:
+            from ..agents.controlled_evidence import NOTICE, ControlledEvidenceService
+
+            warnings.append(NOTICE)
+            knowledge = ControlledEvidenceService.from_file(settings.controlled_evidence_file)
+        else:
+            knowledge = _load_knowledge()
+    except ModuleNotFoundError as exc:
+        if exc.name and exc.name.startswith("consulting_platform.knowledge"):
+            warnings.append("Knowledge service is not installed yet.")
+        else:
+            warnings.append(
+                "Knowledge dependencies are missing; install them with "
+                "`python -m pip install -e '.[knowledge]'`."
+            )
     except ImportError:
-        warnings.append("Knowledge service is not installed yet.")
+        warnings.append("Knowledge service could not be imported; check its installed dependencies.")
     except Exception:
         log.exception("knowledge service failed to start")
-        warnings.append("Knowledge service failed to start.")
+        warnings.append(
+            "Controlled evidence file could not be loaded; consulting is unavailable."
+            if settings.controlled_evidence_file is not None
+            else "Knowledge service failed to start."
+        )
 
     consulting = None
     try:
+        if knowledge is not None and all(
+            status.status == "unavailable" for status in knowledge.get_status().domains.values()
+        ):
+            raise ServiceUnavailableError(
+                "Knowledge index is unavailable; run `python scripts/build_index.py`."
+            )
         consulting = create_consulting_service(knowledge, settings=settings.core)
     except ServiceUnavailableError as exc:
         # Missing knowledge service or credentials: unavailable, never a demo fallback.

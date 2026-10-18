@@ -1,0 +1,10 @@
+flowchart LR
+    A[Domain task + customer context] --> B[retrieve: focused searches + hard filters]
+    B --> C[analyze_extract: LLM facts, candidates, proposed actions]
+    C --> D[validate_evidence: exact spans, identities, values, units]
+    D --> E[rank_candidates: deterministic requirements comparison]
+    E --> F[Return grounded domain result to manager]
+    KB[(Local hybrid knowledge index)] --> B
+    P[Domain policy: Technology / Clinical / SEC / CSR] -.-> C
+    P -.-> D
+    N[Ranking skips when no product comparison is requested] -.-> E

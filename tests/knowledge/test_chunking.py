@@ -5,8 +5,8 @@ from pathlib import Path
 from transformers import AutoTokenizer
 
 from consulting_platform.knowledge.chunking import (
-    MODEL_NAME,
     MAX_TOKENS,
+    MODEL_NAME,
     create_chunk_id,
     split_text_into_chunks,
 )

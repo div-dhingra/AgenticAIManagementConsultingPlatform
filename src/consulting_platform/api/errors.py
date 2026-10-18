@@ -9,6 +9,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from ..agents.llm import ModelTimeoutError
 from ..contracts import (
     ErrorBody,
     ErrorDetail,
@@ -79,8 +80,14 @@ def install_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(UpstreamTimeoutError)
     async def _timeout(request: Request, exc: UpstreamTimeoutError) -> JSONResponse:
-        log.warning("request_id=%s upstream timeout", get_request_id(request))
-        return error_response(request, 504, "UPSTREAM_TIMEOUT", "The consulting workflow did not finish within the deadline.")
+        provider_timeout = isinstance(exc, ModelTimeoutError)
+        log.warning("request_id=%s timeout_kind=%s", get_request_id(request), "model_call" if provider_timeout else "consultation")
+        message = (
+            "The model provider did not respond within the per-call time limit. Please try again."
+            if provider_timeout else
+            "The consulting workflow did not finish within the overall deadline. Please try again or ask a narrower question."
+        )
+        return error_response(request, 504, "UPSTREAM_TIMEOUT", message)
 
     @app.exception_handler(UpstreamModelError)
     async def _upstream(request: Request, exc: UpstreamModelError) -> JSONResponse:

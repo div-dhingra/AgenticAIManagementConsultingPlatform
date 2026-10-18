@@ -6,7 +6,6 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 

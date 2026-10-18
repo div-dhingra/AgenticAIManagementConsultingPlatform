@@ -42,7 +42,7 @@ you configure your key in `.env`:
   --knowledge-factory consulting_platform.knowledge.service:create_knowledge_service
 ```
 
-The module/factory path above is an integration example, not an implemented KB.
+The module/factory path above loads the implemented local knowledge service.
 The evaluator records routing exact match, micro precision/recall, status checks,
 citation-reference validity, observed latency, warnings, and errors. Retrieval
 hit@5 remains the KB teammate's separate metric: this runner measures **final
@@ -56,3 +56,7 @@ run. This recomputes metrics without making paid inference calls. Re-run test
 cases only when evaluating a frozen implementation; save corpus/config versions
 alongside the report. The synthetic smoke report in this directory is labeled
 demo-only; it is not evidence of live model or real-corpus accuracy.
+
+See `docs/CONSULTING_TEST_GUIDE.md` for exact UI questions, expected decisions,
+negative cases, and assignment coverage. `demo_acceptance.jsonl` holds the
+repeatable demo inputs; these are development checks, not a held-out benchmark.

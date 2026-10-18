@@ -168,11 +168,13 @@ async def test_provider_stop_errors_are_not_retried_as_truncation(reason, error)
     assert budget.calls == 1 and not budget.repair_used
 
 
-def test_cohere_wire_schema_encodes_dynamic_maps_as_fixed_records():
+def test_cohere_wire_schema_uses_unique_nullable_domain_slots():
     schema = cohere_schema(RoutePlan.model_json_schema())
     tasks = schema["properties"]["tasks"]
-    assert tasks["type"] == "array"
-    assert tasks["items"]["required"] == ["key", "value"]
+    assert tasks["type"] == "object"
+    assert set(tasks["properties"]) == {"technology", "clinical", "sec", "corporate_responsibility"}
+    assert tasks["required"] == list(tasks["properties"])
+    assert tasks["properties"]["clinical"]["anyOf"][-1] == {"type": "null"}
     assert "minimum" not in str(schema) and "default" not in str(schema)
     assert "tasks" in schema["required"]
 
@@ -231,7 +233,7 @@ def test_schema_property_names_are_not_removed_as_annotations():
 async def test_cohere_uses_server_schema_and_restores_canonical_map():
     def handler(request):
         body = json.loads(request.content)
-        assert body["response_format"]["schema"]["properties"]["tasks"]["type"] == "array"
+        assert body["response_format"]["schema"]["properties"]["tasks"]["type"] == "object"
         return httpx.Response(
             200,
             json={
@@ -249,3 +251,124 @@ async def test_cohere_uses_server_schema_and_restores_canonical_map():
         role="router", system="JSON", payload={}, schema=RoutePlan.model_json_schema()
     )
     assert result == {"tasks": {}, "clarification_questions": []}
+
+
+async def test_specialist_wire_schema_requires_span_ids_instead_of_retyped_quotes():
+    def handler(request):
+        body = json.loads(request.content)
+        support = body["response_format"]["schema"]["$defs"]["Support"]
+        assert set(support["properties"]) == {"evidence_id", "span_id"}
+        assert support["required"] == ["evidence_id", "span_id"]
+        assert "candidates" not in body["response_format"]["schema"]["properties"]
+        assert "actions" not in body["response_format"]["schema"]["properties"]
+        assert body["thinking"] == {"type": "enabled", "token_budget": 256}
+        return httpx.Response(
+            200,
+            json={
+                "finish_reason": "COMPLETE",
+                "message": {
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": json.dumps(
+                                {
+                                    "findings": [
+                                        {
+                                            "statement": "A documented fact",
+                                            "supports": [{"evidence_id": "e1", "span_id": "s0"}],
+                                        }
+                                    ]
+                                }
+                            ),
+                        }
+                    ]
+                },
+            },
+        )
+
+    client = HostedLLMClient(
+        Settings(api_key="test-only", model="command-a-plus-05-2026"),
+        transport=httpx.MockTransport(handler),
+    )
+    analysis = await generate(
+        client,
+        RequestBudget(),
+        SpecialistAnalysis,
+        role="sec",
+        system="JSON",
+        payload={
+            "allow_actions": False,
+            "chunks": [
+                {"chunk_id": "e1", "quote_spans": [{"span_id": "s0", "quote": "Source fact."}]}
+            ],
+        },
+    )
+    assert analysis.findings[0].supports[0].span_id == "s0"
+    assert analysis.findings[0].supports[0].quote == ""
+
+
+async def test_invalid_optional_hypothesis_does_not_destroy_supported_facts():
+    from consulting_platform.agents.mocks import ScriptedLLMClient
+
+    client = ScriptedLLMClient(
+        {
+            "sec": [
+                {
+                    "findings": [
+                        {
+                            "statement": "Documented risk",
+                            "supports": [{"evidence_id": "e1", "quote": "Exact source text"}],
+                        },
+                        {
+                            "statement": "Unsupported hypothetical benefit",
+                            "assessment": "inference",
+                            "supports": [],
+                        },
+                    ],
+                    "actions": [{"title": "Unsupported proposal", "supports": []}],
+                }
+            ]
+        }
+    )
+    budget = RequestBudget()
+    result = await generate(
+        client, budget, SpecialistAnalysis, role="sec", system="JSON", payload={}
+    )
+    assert [f.statement for f in result.findings] == ["Documented risk"]
+    assert result.actions == [] and budget.calls == 1
+    assert any("empty evidence supports" in note for note in result.limitations)
+
+
+async def test_independent_roles_can_repair_without_an_unbounded_retry_loop():
+    from consulting_platform.agents.mocks import ScriptedLLMClient
+
+    client = ScriptedLLMClient(
+        {"one": [{"wrong": True}, {"tasks": {}}], "two": [{"wrong": True}, {"tasks": {}}]}
+    )
+    budget = RequestBudget()
+    for role in ("one", "two"):
+        result = await generate(client, budget, RoutePlan, role=role, system="JSON", payload={})
+        assert result.tasks == {}
+    assert budget.calls == 4 and budget.repair_count == 2
+    for _ in range(2):
+        await budget.reserve()
+    await budget.reserve(repair=True)
+    with pytest.raises(UpstreamModelError, match="budget"):
+        await budget.reserve(repair=True)
+
+
+def test_nullable_router_slots_restore_only_active_domains():
+    result = restore_cohere_maps(
+        {
+            "tasks": {
+                "technology": None,
+                "clinical": None,
+                "sec": {"query": "Cisco 2025 risk factors"},
+                "corporate_responsibility": None,
+            }
+        },
+        RoutePlan.model_json_schema(),
+    )
+    plan = RoutePlan.model_validate(result)
+    assert list(plan.tasks) == ["sec"]
+    assert plan.tasks["sec"].query == "Cisco 2025 risk factors"

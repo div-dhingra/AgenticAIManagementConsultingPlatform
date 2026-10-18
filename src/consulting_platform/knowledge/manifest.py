@@ -4,14 +4,13 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from consulting_platform.knowledge.metadata import (
-    identify_company,
-    identify_report_year,
-    identify_filing_type,
-)
-
 import pymupdf
 
+from consulting_platform.knowledge.metadata import (
+    identify_company,
+    identify_filing_type,
+    identify_report_year,
+)
 
 DOMAIN_NAMES = [
     "technology",
@@ -91,7 +90,7 @@ def create_manifest(
                     ),
                     "report_year": (
                         identify_report_year(pdf_path)
-                        if domain == "sec"
+                        if domain in {"sec", "corporate_responsibility"}
                         else None
                     ),
                     "filing_type": (

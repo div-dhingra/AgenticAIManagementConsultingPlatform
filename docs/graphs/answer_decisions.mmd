@@ -1,0 +1,12 @@
+flowchart TD
+    A[Reviewed claims + actions + customer inputs] --> D{Router incident?}
+    D -->|Missing SKU or diagnostic account| C[Needs clarification: no parts order, diagnostic plan]
+    D -->|Inputs supplied| F[Require documented fault relevance + compatibility before part selection]
+    D -->|No incident| G[Check every requested subquestion / company / year]
+    F --> G
+    G --> H{Any useful grounded content?}
+    H -->|No| I[Insufficient evidence]
+    H -->|Yes| J{Unresolved requested answer?}
+    J -->|Yes| K[Partial: answer supported parts and name gaps]
+    J -->|No| L[Answered: clear decision + evidence + next steps]
+    P[Warnings alone do not mean Partial; hypotheses stay labeled proposals] -.-> J

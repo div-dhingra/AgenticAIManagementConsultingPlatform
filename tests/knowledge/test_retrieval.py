@@ -48,7 +48,8 @@ def test_domain_status(indexed_service):
     assert status.domains[Domain.SEC].chunk_count > 0
 
 
-def test_cisco_filter(indexed_service):
+@pytest.mark.parametrize("company", ["Cisco", "cisco"])
+def test_cisco_filter(indexed_service, company):
     service = indexed_service
 
     async def run_test():
@@ -56,7 +57,7 @@ def test_cisco_filter(indexed_service):
             query="Cisco risk factors",
             domains=[Domain.SEC],
             filters=RetrievalFilters(
-                companies=["Cisco"],
+                companies=[company],
                 report_years=[2025],
             ),
             top_k=3,
@@ -76,13 +77,27 @@ def test_cisco_filter(indexed_service):
         assert 0.0 <= chunk.retrieval_score <= 1.0
 
 
-def test_missing_domain(indexed_service):
+def test_sofi_report_year_filter(indexed_service):
+    result = asyncio.run(indexed_service.retrieve(
+        query="Financing food security and nutrition",
+        domains=[Domain.CORPORATE_RESPONSIBILITY],
+        filters=RetrievalFilters(report_years=[2024]),
+        top_k=3,
+    ))
+    assert result.status == "ok"
+    assert len(result.chunks) == 3
+    assert all(chunk.report_year == 2024 for chunk in result.chunks)
+    assert all("2024" in chunk.title for chunk in result.chunks)
+
+
+def test_technology_retrieval(indexed_service):
     service = indexed_service
 
     async def run_test():
         return await service.retrieve(
             query="Cisco router specifications",
             domains=[Domain.TECHNOLOGY],
+            filters=RetrievalFilters(companies=["cisco"]),
             top_k=3,
         )
 
@@ -97,6 +112,20 @@ def test_missing_domain(indexed_service):
         assert chunk.domain == Domain.TECHNOLOGY
         assert chunk.company == "Cisco"
         assert chunk.source_uri.startswith("https://")
+
+
+def test_clinical_retrieval(indexed_service):
+    result = asyncio.run(indexed_service.retrieve(
+        query="Agilent Seahorse real-time cell metabolic analysis",
+        domains=[Domain.CLINICAL],
+        filters=RetrievalFilters(companies=["agilent"]),
+        top_k=3,
+    ))
+    assert result.status == "ok"
+    assert result.chunks
+    assert all(chunk.domain == Domain.CLINICAL for chunk in result.chunks)
+    assert all(chunk.company == "Agilent" for chunk in result.chunks)
+    assert all(chunk.source_uri.startswith("https://") for chunk in result.chunks)
 
 
 def test_missing_index(tmp_path):
@@ -149,3 +178,13 @@ def test_strict_company_filter(indexed_service):
     assert result.status == "ok"
     assert result.chunks == []
     assert result.warnings == []
+
+
+def test_multi_company_retrieval_reserves_company_coverage(indexed_service):
+    result = asyncio.run(indexed_service.retrieve(
+        "Cisco demand inventory purchase commitment risks", [Domain.SEC],
+        RetrievalFilters(companies=["cisco", "agilent"], report_years=[2025]), top_k=5,
+    ))
+    assert result.status == "ok" and len(result.chunks) == 5
+    assert {chunk.company for chunk in result.chunks} == {"Cisco", "Agilent"}
+    assert all(chunk.report_year == 2025 for chunk in result.chunks)

@@ -175,6 +175,7 @@ class FakeLLMClient:
             return {
                 "accepted_finding_ids": [f["id"] for f in payload["findings"]],
                 "accepted_recommendation_ids": [r["id"] for r in payload["recommendations"]],
+                "accepted_clarification_ids": [q["id"] for q in payload.get("clarifications", [])],
                 "limitations": [],
             }
         if role == "synthesis":

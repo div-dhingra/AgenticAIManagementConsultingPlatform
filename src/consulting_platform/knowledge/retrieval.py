@@ -1,19 +1,21 @@
 
 import json
 from pathlib import Path
+from threading import Lock
 
 import joblib
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
+from consulting_platform.agents.grounding import normalize_company
 from consulting_platform.contracts import (
     Domain,
     EvidenceChunk,
     RetrievalFilters,
 )
 from consulting_platform.knowledge.index import MODEL_NAME
-from consulting_platform.knowledge.sections import assign_sections
 from consulting_platform.knowledge.query_intent import get_risk_section_boost
+from consulting_platform.knowledge.sections import assign_sections
 
 
 class HybridRetriever:
@@ -42,8 +44,11 @@ class HybridRetriever:
             index_dir / "tfidf_matrix.joblib"
         )
 
-        # Load the same embedding model used to build the index.
-        self.model = SentenceTransformer(MODEL_NAME)
+        # Use CPU for request-time inference. On Apple Silicon the automatic
+        # MPS device can segfault inside Metal when requests encode concurrently.
+        # The checkpoint is unchanged, so existing index embeddings remain valid.
+        self.model = SentenceTransformer(MODEL_NAME, device="cpu", local_files_only=True)
+        self._encode_lock = Lock()
 
         # Check that the index files have matching sizes.
         chunk_count = len(self.chunks)
@@ -75,7 +80,10 @@ class HybridRetriever:
 
         # Filter by company.
         if filters.companies:
-            if chunk["company"] not in filters.companies:
+            company = normalize_company(chunk.get("company") or "", Domain(chunk["domain"]))
+            if not company or company not in {
+                normalize_company(value, Domain(chunk["domain"])) for value in filters.companies
+            }:
                 return False
 
         # Filter by report year.
@@ -109,11 +117,15 @@ class HybridRetriever:
             return []
 
         # Step 2: Generate a semantic embedding for the query.
-        query_embedding = self.model.encode(
-            [query],
-            convert_to_numpy=True,
-            normalize_embeddings=True,
-        )[0]
+        # This lock lives in the worker thread, so cancellation of an async
+        # request cannot release it while native inference is still running.
+        # Only local encoding is serialized; the specialist LLM calls stay parallel.
+        with self._encode_lock:
+            query_embedding = self.model.encode(
+                [query],
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+            )[0]
 
         # Step 3: Calculate semantic similarity.
         semantic_scores = (
@@ -174,6 +186,26 @@ class HybridRetriever:
             -adjusted_scores,
             kind="stable",
         )
+
+        # A multi-company question must not spend the entire evidence budget on
+        # the company with the highest lexical match. Reserve its best matching
+        # passage for each requested company, then fill the remaining slots.
+        if filters and len(filters.companies) > 1:
+            representatives = {}
+            for position in sorted_positions:
+                if adjusted_scores[position] < 0.20:
+                    continue
+                chunk = self.chunks[matching_indices[position]]
+                company = normalize_company(chunk.get("company") or "", Domain(chunk["domain"]))
+                representatives.setdefault(company, position)
+            reserved = list(representatives.values())[:top_k]
+            selected = set(reserved)
+            for position in sorted_positions:
+                if len(selected) >= top_k:
+                    break
+                if adjusted_scores[position] >= 0.20:
+                    selected.add(position)
+            sorted_positions = [position for position in sorted_positions if position in selected]
 
         # Step 9: Convert matching chunks to EvidenceChunk.
         results = []

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1130" role="img" aria-label="Overall project architecture">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#52647b"/></marker></defs>
+<rect width="1400" height="1130" fill="#f6f8fc"/>
+<text x="45" y="52" fill="#152840" font-family="Arial,sans-serif" font-size="29" font-weight="bold">Overall project architecture</text>
+<text x="45" y="86" fill="#52647b" font-family="Arial,sans-serif" font-size="17">Two experiences share one UI and API; consulting and market-basket recommendations use separate services.</text>
+<polyline points="685.0,205 685.0,235.0 685.0,235.0 685.0,265" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="685.0,355 685.0,390.0 685.0,390.0 685.0,425" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="694.0" y="382.0" fill="#52647b" font-family="Arial,sans-serif" font-size="15">HTTP JSON</text>
+<polyline points="685.0,515 685.0,557.5 255.0,557.5 255.0,600" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="264.0" y="549.5" fill="#52647b" font-family="Arial,sans-serif" font-size="15">consulting</text>
+<polyline points="685.0,515 685.0,557.5 1145.0,557.5 1145.0,600" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1154.0" y="549.5" fill="#52647b" font-family="Arial,sans-serif" font-size="15">retail</text>
+<polyline points="255.0,700 255.0,740.0 695.0,740.0 695.0,780" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="704.0" y="732.0" fill="#52647b" font-family="Arial,sans-serif" font-size="15">model calls</text>
+<polyline points="255.0,700 255.0,740.0 255.0,740.0 255.0,780" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="264.0" y="732.0" fill="#52647b" font-family="Arial,sans-serif" font-size="15">retrieve</text>
+<polyline points="255.0,880 255.0,920.0 255.0,920.0 255.0,960" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1145.0,700 1145.0,740.0 1145.0,740.0 1145.0,780" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1154.0" y="732.0" fill="#52647b" font-family="Arial,sans-serif" font-size="15">load</text>
+<rect x="500" y="120" width="370" height="85" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="685.0" y="162.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Enterprise customer / consultant</text>
+<rect x="500" y="265" width="370" height="90" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="685.0" y="298.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Streamlit</text>
+<text x="685.0" y="322.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Consulting + Retail tabs</text>
+<rect x="500" y="425" width="370" height="90" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="685.0" y="458.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">FastAPI</text>
+<text x="685.0" y="482.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">HTTP contracts, health, errors</text>
+<rect x="80" y="600" width="350" height="100" rx="12" fill="#e9e2ff" stroke="#7352b4" stroke-width="1.7"/>
+<text x="255.0" y="638.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">POST /consult</text>
+<text x="255.0" y="662.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Manager + four specialist graphs</text>
+<rect x="970" y="600" width="350" height="100" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="1145.0" y="638.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">POST /recommend + catalog</text>
+<text x="1145.0" y="662.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Association-rule ranking</text>
+<rect x="520" y="780" width="350" height="100" rx="12" fill="#e9e2ff" stroke="#7352b4" stroke-width="1.7"/>
+<text x="695.0" y="818.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Cohere model API</text>
+<text x="695.0" y="842.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Explicit Mistral option</text>
+<rect x="80" y="780" width="350" height="100" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="255.0" y="818.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">KnowledgeService</text>
+<text x="255.0" y="842.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Hybrid retrieval + metadata</text>
+<rect x="80" y="960" width="350" height="90" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="255.0" y="993.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Local chunks + embeddings</text>
+<text x="255.0" y="1017.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">TF-IDF index</text>
+<rect x="970" y="780" width="350" height="100" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="1145.0" y="818.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Retail model artifact</text>
+<text x="1145.0" y="842.0" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Trained from basket CSV</text>
+<text x="45" y="1100" fill="#52647b" font-family="Arial,sans-serif" font-size="16">Purple: model step · Blue: application code · Green: data/service · Amber: checks and decisions</text></svg>

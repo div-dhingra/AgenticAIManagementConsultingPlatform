@@ -2,14 +2,21 @@
 
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from consulting_platform.contracts import ContractModel, Domain, Text, unique
 
 
 class Support(ContractModel):
     evidence_id: Text
-    quote: str = Field(min_length=1, max_length=400)
+    quote: str = Field(default="", max_length=400)
+    span_id: str | None = None
+
+    @model_validator(mode="after")
+    def require_source_reference(self):
+        if not self.quote.strip() and not self.span_id:
+            raise ValueError("Supply a quote or a source span_id")
+        return self
 
 
 class AttributeFact(ContractModel):
@@ -48,10 +55,41 @@ class RankedCandidate(ContractModel):
     explanation: str
 
 
+class AnswerRequirement(ContractModel):
+    """One independently answerable part of the customer's question."""
+
+    id: Text
+    question: Text
+    company: str | None = None
+    report_year: int | None = None
+
+
+class CoverageCheck(ContractModel):
+    requirement_id: Text
+    finding_ids: list[str] = Field(default_factory=list)
+    recommendation_ids: list[str] = Field(default_factory=list)
+    status: Literal["answered", "unresolved"] = "unresolved"
+    reason: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def legacy_answered_flag(cls, value):
+        if isinstance(value, dict) and "answered" in value:
+            value = dict(value)
+            answered = value.pop("answered")
+            value.setdefault("status", "answered" if answered is True else "unresolved")
+        return value
+
+    @property
+    def answered(self):
+        return self.status == "answered"
+
+
 class DomainTask(ContractModel):
     query: Text
     compare_candidates: bool = False
     constraints: list[Constraint] = Field(default_factory=list)
+    answer_requirements: list[AnswerRequirement] = Field(default_factory=list, max_length=8)
 
     @field_validator("constraints")
     @classmethod
@@ -88,6 +126,7 @@ class SpecialistAnalysis(ContractModel):
     actions: list[ActionDraft] = Field(default_factory=list)
     clarification_questions: list[Text] = Field(default_factory=list)
     follow_up_query: str | None = None
+    missing_evidence: list[Text] = Field(default_factory=list)
     limitations: list[Text] = Field(default_factory=list)
 
 
@@ -107,4 +146,18 @@ class SynthesisPlan(ContractModel):
 class EvidenceReview(ContractModel):
     accepted_finding_ids: list[str]
     accepted_recommendation_ids: list[str]
+    accepted_clarification_ids: list[str] = Field(default_factory=list)
     limitations: list[Text] = Field(default_factory=list)
+    coverage: list[CoverageCheck] = Field(default_factory=list)
+    unanswered_questions: list[Text] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def covered_answers_reference_accepted_content(self):
+        for check in self.coverage:
+            if check.answered and (
+                not (check.finding_ids or check.recommendation_ids)
+                or not set(check.finding_ids).issubset(self.accepted_finding_ids)
+                or not set(check.recommendation_ids).issubset(self.accepted_recommendation_ids)
+            ):
+                raise ValueError("Answered coverage must reference accepted content only")
+        return self

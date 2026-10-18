@@ -1,4 +1,6 @@
 
+from threading import Lock
+
 import numpy as np
 
 from consulting_platform.contracts import (
@@ -72,6 +74,7 @@ def make_retriever():
     retriever.vectorizer = FakeVectorizer()
     retriever.tfidf_matrix = FakeTfidfMatrix()
     retriever.model = FakeModel()
+    retriever._encode_lock = Lock()
 
     return retriever
 

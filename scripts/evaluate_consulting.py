@@ -3,6 +3,7 @@
 import argparse
 import asyncio
 import json
+import re
 import statistics
 import time
 from datetime import datetime, timezone
@@ -109,6 +110,41 @@ def score(rows: list[dict], cases: list[dict], run_id: str, mode: str) -> dict:
     }
 
 
+def check_acceptance(response, case):
+    """Mechanical demo criteria, explicitly separate from human factual review."""
+    checks = {
+        "domains": {d.value for d in response.domains} == set(case["expected_domains"]),
+        "status": response.status == case.get("expected_status", response.status),
+    }
+    criteria = case.get("acceptance", {})
+    findings = " ".join(f.statement for f in response.findings)
+    for pattern in criteria.get("finding_patterns", []):
+        checks[f"finding:{pattern}"] = bool(re.search(pattern, findings, re.I))
+    titles = " ".join(r.title for r in response.recommendations)
+    for title in criteria.get("recommendation_titles", []):
+        checks[f"recommendation:{title}"] = title.casefold() in titles.casefold()
+    for title in criteria.get("excluded_recommendation_titles", []):
+        checks[f"exclude:{title}"] = title.casefold() not in titles.casefold()
+    if criteria.get("proposed_action_with_measures"):
+        checks["proposed_action_with_measures"] = any(
+            r.assessment == "proposed" and r.next_steps and r.success_metrics
+            for r in response.recommendations
+        )
+    if criteria.get("clarification"):
+        checks["clarification"] = bool(response.clarification_questions)
+    if criteria.get("no_parts_order"):
+        checks["no_parts_order"] = not any(r.kind in {"component", "product"} for r in response.recommendations)
+    for pattern in criteria.get("answer_patterns", []):
+        checks[f"answer:{pattern}"] = bool(re.search(pattern, response.summary, re.I))
+    if response.findings:
+        checks["inline_citations"] = bool(re.search(r"\[\d+\]", response.summary))
+    return {
+        "passed": all(checks.values()),
+        "checks": checks,
+        "scope": "mechanical criteria; not a substitute for checking claim support",
+    }
+
+
 async def evaluate(service, cases):
     rows = []
     for case in cases:
@@ -118,10 +154,27 @@ async def evaluate(service, cases):
                 ConsultRequest.model_validate(case["request"]),
                 request_id=str(uuid4()),
             )
-            row = {"case_id": case["id"], "response": response.model_dump(mode="json")}
+            row = {
+                "case_id": case["id"],
+                "response": response.model_dump(mode="json"),
+                "acceptance": check_acceptance(response, case),
+            }
         except (ServiceUnavailableError, UpstreamTimeoutError, UpstreamModelError) as exc:
             row = {"case_id": case["id"], "response": None, "error": type(exc).__name__}
         rows.append({**row, "latency_seconds": time.monotonic() - start})
+        print(
+            json.dumps(
+                {
+                    "case_id": case["id"],
+                    "status": row.get("response", {}).get("status")
+                    if row.get("response")
+                    else row.get("error"),
+                    "accepted": row.get("acceptance", {}).get("passed"),
+                    "seconds": round(rows[-1]["latency_seconds"], 1),
+                }
+            ),
+            flush=True,
+        )
     return rows
 
 
@@ -131,16 +184,29 @@ def main():
     parser.add_argument("--mode", choices=["live", "demo"], default="demo")
     parser.add_argument("--split", choices=["development", "test"], default="development")
     parser.add_argument("--knowledge-factory")
+    parser.add_argument("--repeat", type=int, default=1, help="Repeat each selected case (1..10).")
+    parser.add_argument(
+        "--case-id", action="append", help="Run only these case IDs; may be repeated."
+    )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--score-existing", type=Path)
     args = parser.parse_args()
+    if not 1 <= args.repeat <= 10:
+        parser.error("--repeat must be between 1 and 10")
     all_cases = [json.loads(line) for line in args.cases.read_text().splitlines() if line.strip()]
     if args.score_existing:
         report = json.loads(args.score_existing.read_text())
         report["metrics"] = score(report["rows"], all_cases, report["run_id"], report["mode"])
         output = args.output or args.score_existing.with_suffix(".scored.json")
     else:
-        cases = [c for c in all_cases if c["split"] == args.split]
+        cases = [
+            c
+            for c in all_cases
+            if c["split"] == args.split and (not args.case_id or c["id"] in args.case_id)
+        ]
+        if not cases:
+            parser.error("No matching evaluation cases")
+        cases = [case for _ in range(args.repeat) for case in cases]
         settings = Settings.from_env()
         settings.mode = args.mode
         knowledge = load_factory(args.knowledge_factory) if args.knowledge_factory else None
@@ -152,6 +218,7 @@ def main():
             "created_at_utc": datetime.now(timezone.utc).isoformat(),
             "mode": args.mode,
             "split": args.split,
+            "repeat": args.repeat,
             "provider": "fake" if args.mode == "demo" else settings.provider,
             "model": "deterministic fixture" if args.mode == "demo" else settings.model,
             "rows": rows,

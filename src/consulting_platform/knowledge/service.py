@@ -1,18 +1,18 @@
+import asyncio
 from pathlib import Path
 
 from consulting_platform.contracts import (
     Domain,
     DomainKnowledgeStatus,
+    EvidenceChunk,
     KnowledgeStatus,
     RetrievalFilters,
     RetrievalResult,
 )
-
 from consulting_platform.knowledge.retrieval import HybridRetriever
 
 
 class LocalKnowledgeService:
-
     def __init__(self, index_dir=None):
         self.mode = "live"
         self.retriever = None
@@ -55,7 +55,10 @@ class LocalKnowledgeService:
                 warnings=["Knowledge index is unavailable."],
             )
 
-        chunks = self.retriever.search(
+        # Embedding inference is synchronous; keep the API event loop available
+        # for other domains, requests and workflow deadlines.
+        chunks = await asyncio.to_thread(
+            self.retriever.search,
             query=query,
             domains=domains,
             filters=filters,
@@ -78,10 +81,7 @@ class LocalKnowledgeService:
                 mode=self.mode,
                 status="partial" if chunks else "unavailable",
                 chunks=chunks,
-                warnings=[
-                    "No indexed documents for domains: "
-                    + ", ".join(missing_domains)
-                ],
+                warnings=["No indexed documents for domains: " + ", ".join(missing_domains)],
             )
 
         return RetrievalResult(
@@ -91,18 +91,78 @@ class LocalKnowledgeService:
             warnings=[],
         )
 
+    async def expand_context(self, chunks: list[EvidenceChunk], max_chunks: int = 4):
+        """Exact neighboring records, never text merged under an existing ID.
+
+        Optional capability: other KnowledgeService implementations need not add it.
+        Domain/company/year are inherited from the same source document and checked
+        again at the agent boundary.
+        """
+        if self.retriever is None or max_chunks <= 0:
+            return []
+        records = self.retriever.chunks
+        positions = {c["chunk_id"]: i for i, c in enumerate(records)}
+        seen = {c.chunk_id for c in chunks}
+        neighbors = []
+        for chunk in chunks:
+            position = positions.get(chunk.chunk_id)
+            if position is None:
+                continue
+            for offset in (1, -1):
+                index = position + offset
+                if not 0 <= index < len(records):
+                    continue
+                record = records[index]
+                if (
+                    record["document_id"] != chunk.document_id
+                    or record["domain"] != chunk.domain
+                    or record.get("company") != chunk.company
+                    or record.get("report_year") != chunk.report_year
+                    or record.get("source_uri") != chunk.source_uri
+                    or record["chunk_id"] in seen
+                    or (chunk.page and record.get("page") and abs(record["page"] - chunk.page) > 1)
+                ):
+                    continue
+                neighbors.append(
+                    EvidenceChunk.model_validate(
+                        {
+                            "retrieval_score": 0.0,  # Context expansion is not a scored search hit.
+                            **{
+                                k: record.get(k)
+                                for k in (
+                                    "chunk_id",
+                                    "document_id",
+                                    "text",
+                                    "title",
+                                    "domain",
+                                    "company",
+                                    "report_year",
+                                    "source_uri",
+                                    "page",
+                                    "printed_page",
+                                )
+                            },
+                        }
+                    )
+                )
+                seen.add(record["chunk_id"])
+                if len(neighbors) >= max_chunks:
+                    return neighbors
+        return neighbors
+
     def get_status(self) -> KnowledgeStatus:
 
         domain_statuses = {}
 
         for domain in Domain:
-
             if self.retriever is None:
                 domain_statuses[domain] = DomainKnowledgeStatus(
                     status="unavailable",
                     document_count=0,
                     chunk_count=0,
-                    warnings=["Knowledge index is unavailable."],
+                    warnings=[
+                        "Knowledge index is unavailable; run `python scripts/build_index.py` after installing `.[knowledge]`."
+                    ],
                 )
                 continue
 

@@ -107,6 +107,20 @@ Settings are read by Person A's `consulting_platform.config.Settings` (environme
 - If B's factory has another name, change `KNOWLEDGE_FACTORY` in that file.
 - If B's service or the provider key is missing, `/consult` returns 503 and `/health` explains why.
 
+Before B's index is ready, you can explicitly use selected real passages with live
+inference through the same UI:
+
+```bash
+APP_MODE=live CONSULT_EVIDENCE_FILE=fixtures/consulting/controlled_real_passages.json \
+  .venv/bin/uvicorn consulting_platform.api.app:create_app --factory --port 8000
+```
+
+Restart the API, refresh the UI and its status, choose a controlled example in
+Consulting, and click **Ask**. This uses real model API calls and always discloses
+the limited evidence. Retail is unchanged. Unset/empty `CONSULT_EVIDENCE_FILE` to
+return to B's factory; do not combine it with demo mode. See
+[controlled tests](docs/CONTROLLED_TESTS.md) for details.
+
 ## 5. API summary
 
 | Route | Success | Notable errors |
@@ -151,3 +165,13 @@ python scripts/train_retail.py          # retrains and rewrites evaluation/retai
 - Retail statistics measure co-purchase only. They do not show compatibility or business impact.
 - Most carts of 2+ items get no suggestion because the data is sparse and close to random.
 - Canvas states no explicit slide, video or repo format. Treat the demo outline as a useful asset, not a mandated deliverable.
+
+### Consulting demo and architecture
+
+- [Exact demo questions, expected decisions, negative cases and evaluation](docs/CONSULTING_TEST_GUIDE.md)
+- [Individual agents, manager orchestration, project architecture, RAG and answer decisions](docs/ARCHITECTURE.md)
+
+The full live UI includes examples for Technology, Clinical, SEC and SOFI, plus
+cross-domain and router-troubleshooting presets. A router incident without diagnostic
+evidence should request clarification and avoid ordering parts; an `Answered` badge
+is not the expected outcome for every safety/abstention case.

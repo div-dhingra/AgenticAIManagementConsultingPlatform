@@ -33,7 +33,7 @@ retrieval accuracy or a replacement for the real KB.
 ## Live Cohere setup
 
 Copy `.env.example` to `.env` and set `COHERE_API_KEY` locally. Leave
-`LLM_PROVIDER=cohere` and start with `COHERE_MODEL=command-a-plus-05-2026` for all
+`LLM_PROVIDER=cohere` and start with `COHERE_MODEL=command-a-03-2025` for all
 roles. The key stays on the server, never in frontend request bodies. Optional
 `COHERE_ROUTER_MODEL`, `COHERE_SPECIALIST_MODEL`, and `COHERE_SYNTHESIS_MODEL`
 overrides inherit the base model when empty. Review uses the specialist override.
@@ -64,7 +64,7 @@ Once the KB teammate supplies a factory, test full retrieval integration:
   --context-json '{"company":"Cisco","report_years":[2025]}'
 ```
 
-The factory path above is an agreed integration example, not existing KB code.
+The factory path above loads the implemented local knowledge service.
 It must return the shared `KnowledgeService` interface. Live use needs both real
 KB artifacts and a working provider credential. Missing either is reported;
 fixtures never enter a live corpus. The API teammate will call the same service
@@ -72,7 +72,7 @@ directly as shown in [INTEGRATION.md](INTEGRATION.md).
 
 To verify provider access before the real KB exists, run
 `.venv/bin/python scripts/check_model.py`. It makes one small external API request
-(plus at most the single configured JSON-repair attempt) and prints a sanitized
+(plus at most one format repair for that call, within the shared three-repair/request cap) and prints a sanitized
 pass/fail outcome. It is not run by unit tests or health checks.
 
 An explicit Mistral alternative is supported: set `LLM_PROVIDER=mistral`,
@@ -154,6 +154,9 @@ and exact quotes; these are separate from public API schemas.
 
 `agents/ranking.py` compares explicit attributes to constraints. A violated hard
 constraint excludes a candidate; an unknown hard constraint makes it conditional.
+Conditional/excluded candidates stay in the internal comparison but are not
+published as product recommendations. Publication also requires at least one
+validated matched constraint. No criteria means no product recommendation.
 Missing constraints never establish suitability. Weights default to one; scores
 are weighted satisfied fractions, not learned probabilities. Only explicitly
 compatible unit families are converted. Unsupported/ambiguous extraction is
@@ -171,6 +174,58 @@ glyph differences only. It recovers and stores the original source substring,
 including its original punctuation. Changed words, quantities, dashes, invented
 IDs, and spliced/elliptical quotes remain invalid. Rejection warnings identify
 the category without logging raw model output.
+
+For a pipe-delimited table only, an exact header plus a nonadjacent exact model
+row can be recovered as two separate verbatim supports. This does not create a
+combined quotation. Wrong rows and changed wording remain invalid. Speed-qualified
+port-count units normalize to `ports` only when the same speed is explicit in the
+attribute key; rates and counts are never interchanged.
+A cited model row can also acquire its actual table header through deterministic
+extraction: the speed-specific port column must be unique and its numeric cell
+must equal the extracted value. This derives the count unit from the source and
+rejects values borrowed from another speed column or a `-` cell.
+
+## Cross-domain result reliability
+
+`agents/port_tables.py` independently extracts speed-specific port counts from
+retrieved, labeled pipe tables. It binds facts to the task's keys and units rather
+than depending on the model to reproduce them. Complete explicit context criteria
+such as `At least 5 1G Ethernet ports per site` have a bounded parser; complex
+clauses are left to normal analysis. Missing/dash, fractional, duplicate-column,
+or conflicting cells remain unknown. No model names or winners are hardcoded.
+
+When all criteria were explicitly parsed and verified against source cells,
+eligibility is a deterministic result. Model review/selection cannot erase that
+narrow comparison merely by omitting its ID. This does not authorize overall
+deployment suitability or bypass semantic review of other claims. Without this
+proof, model review still governs publication.
+
+`agents/csr_actions.py` keeps connectivity proposals at the feasibility stage.
+General SOFI data-quality priorities do not justify procurement or rollout:
+premature commitments are excluded, while retained assessments explicitly describe
+benefits as hypotheses. Valid premises can be exposed as literal source excerpts.
+If only a proposal survives review, the summary describes its cited source basis
+and unverified outcome rather than calling the domain wholly unanswered.
+
+Specialists receive domain-scoped assignments and context. They report missing
+sources through the private `missing_evidence` field; clarification questions are
+reserved for customer facts/preferences. Semantic review also checks whether
+proposed questions are actually needed given the existing request. Duplicate
+questions and legacy source-upload requests are filtered. Submissions remain
+independent; no conversation history is added.
+
+Customer-facing source-availability warnings come from retrieved metadata and
+requested filters. Model limitations/review notes and extraction rejection details
+are preserved as domain-tagged trace diagnostics, shown under **Evidence checks
+and specialist notes**, rather than asserted as global source-availability facts.
+This does not prove complete coverage of a retrieved document or validate every
+free-text statement. The UI keeps material coverage/validation notices visible.
+
+The final summary starts with comparison decisions, then includes validated
+findings or an explicit unresolved result for every requested domain. Product
+alternatives cannot have execution-order dependencies; only business/diagnostic
+actions can be sequenced. The public request/response schemas and retail flow are
+unchanged. Regression coverage lives in `tests/agents/test_reliability.py`.
 
 Cohere requests use a provider-compatible JSON Schema. Dynamic dictionaries are
 encoded internally as key/value records and decoded back into the same canonical
@@ -190,6 +245,10 @@ repair allowance for a fresh, compact response with twice the output budget
   18 requests/minute. Provider throttling is an availability error, not fake output.
 - At most two retrieval rounds per specialist and one manager follow-up per
   request. Selected domains are isolated before merge.
+- Controlled evidence disables query-refinement follow-ups: it returns the same
+  selected passages regardless of query. Other services default to supporting
+  refinement. Optional follow-ups also require enough wall-clock headroom for
+  review and synthesis, in addition to the model-call budget.
 - An overall configurable deadline cannot exceed 90 seconds. Individual provider
   calls default to 30 seconds. External cancellation propagates.
 - `answered`, `partial`, `needs_clarification`, and `insufficient_evidence` are
@@ -244,3 +303,8 @@ Sources:
 
 No live provider response or real-corpus quality is claimed by the implementation
 tests. The user still needs to configure a key and integrate the teammate's KB.
+
+
+See [Answer completeness and demo verification](ANSWER_VALIDATION.md) for the private
+per-question coverage checklist, focused retrieval, cited narrative, and repeated
+live acceptance commands. Public HTTP contracts are unchanged.

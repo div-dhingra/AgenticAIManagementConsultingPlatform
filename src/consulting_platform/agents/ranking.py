@@ -1,6 +1,7 @@
 """Deterministic suitability comparison, independent of retail and model providers."""
 
 import math
+import re
 
 from consulting_platform.agents.models import Candidate, Constraint, RankedCandidate
 
@@ -23,6 +24,16 @@ UNITS = {
 def _compare(fact, constraint: Constraint) -> bool | None:
     left, right = fact.value, constraint.expected_value
     a, b = (fact.unit or "").strip().lower(), (constraint.unit or "").strip().lower()
+
+    def count_unit(unit):
+        match = re.fullmatch(r"(\d+(?:\.\d+)?[gm])\s+(?:ethernet\s+)?ports?", unit, re.I)
+        if match and re.search(
+            r"(?<![a-z0-9])" + re.escape(match[1]) + r"(?![a-z0-9])", constraint.attribute, re.I
+        ):
+            return "ports"
+        return unit
+
+    a, b = count_unit(a), count_unit(b)
     if a != b:
         if a not in UNITS or b not in UNITS or UNITS[a][0] != UNITS[b][0]:
             return None

@@ -39,6 +39,7 @@ def identify_report_year(file_path: Path) -> int | None:
             first_pages += "\n"
 
     patterns = [
+        r"(?:the\s+)?state\s+of\s+food\s+security\s+and\s+nutrition\s+in\s+the\s+world\s+(20\d{2})",
         r"fiscal year ended\s+\w+\s+\d{1,2},?\s+(20\d{2})",
         r"fiscal year ended\s+\w+\s+(20\d{2})",
         r"for the fiscal year ended\s+\w+\s+\d{1,2},?\s+(20\d{2})",

@@ -203,3 +203,32 @@ def test_pdf_smart_apostrophes_retain_original_source_glyphs():
     clean, warnings = ground_analysis(analysis, [chunk])
     assert len(clean.findings) == 1 and warnings == []
     assert clean.findings[0].supports[0].quote == chunk.text
+
+
+def test_span_ids_resolve_only_to_exact_original_source_text():
+    from consulting_platform.agents.evidence_spans import evidence_spans
+
+    chunk = fixture_chunks()[0]
+    spans = evidence_spans(chunk.text)
+    analysis = SpecialistAnalysis.model_validate({"findings": [{
+        "statement": "A documented port fact.",
+        "supports": [{"evidence_id": chunk.chunk_id, "span_id": spans[0]["span_id"]}],
+    }]})
+    clean, warnings = ground_analysis(analysis, [chunk])
+    assert not warnings
+    assert clean.findings[0].supports[0].quote == spans[0]["quote"]
+    assert clean.findings[0].supports[0].quote in chunk.text
+    analysis.findings[0].supports[0].span_id = "invented"
+    clean, warnings = ground_analysis(analysis, [chunk])
+    assert not clean.findings and any("unknown source span" in w for w in warnings)
+
+
+def test_span_reference_cannot_override_a_contradictory_quote():
+    chunk = fixture_chunks()[0]
+    analysis = SpecialistAnalysis.model_validate({"findings": [{
+        "statement": "Wrong count", "supports": [{
+            "evidence_id": chunk.chunk_id, "span_id": "s0", "quote": "There are 999 ports.",
+        }],
+    }]})
+    clean, warnings = ground_analysis(analysis, [chunk])
+    assert not clean.findings and any("disagrees" in w for w in warnings)

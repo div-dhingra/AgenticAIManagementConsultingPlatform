@@ -4,6 +4,7 @@ import uuid
 import pytest
 from fastapi.testclient import TestClient
 
+from consulting_platform.agents.llm import ModelTimeoutError
 from consulting_platform.agents.mocks import FakeConsultingService, FakeKnowledgeService
 from consulting_platform.api.app import create_app
 from consulting_platform.api.deps import Services
@@ -136,6 +137,14 @@ def test_consult_timeout_maps_to_504_and_cancels():
     with client_for(demo_services(consulting=SlowConsulting()), DEMO_FAST_TIMEOUT) as c:
         assert_envelope(c.post("/consult", json={"question": "q"}), 504, "UPSTREAM_TIMEOUT")
     assert SlowConsulting.cancelled
+
+
+def test_model_call_timeout_is_distinct_from_overall_deadline():
+    with client_for(demo_services(consulting=FailingConsulting(ModelTimeoutError("private details")))) as c:
+        response = c.post("/consult", json={"question": "q"})
+    body = assert_envelope(response, 504, "UPSTREAM_TIMEOUT")
+    assert "per-call time limit" in body["error"]["message"]
+    assert "private details" not in response.text
 
 
 @pytest.mark.parametrize(

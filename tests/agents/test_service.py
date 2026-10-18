@@ -51,7 +51,7 @@ async def test_cross_domain_and_csr_company_filter():
     )
     assert set(result.domains) == {Domain.TECHNOLOGY, Domain.SEC, Domain.CORPORATE_RESPONSIBILITY}
     assert {f.domain for f in result.findings} == set(result.domains)
-    assert "Cross-domain" in result.summary
+    assert "Vendor risks" in result.summary and "Food-security priorities" in result.summary
     csr = next(c for c in kb.calls if c["domains"] == [Domain.CORPORATE_RESPONSIBILITY])
     assert csr["filters"].companies == []
 
@@ -311,15 +311,15 @@ async def test_conflicts_suppress_recommendations_and_request_clarification():
         {
             "synthesis": [
                 {
-                    "selected_finding_ids": ["sec:f1"],
-                    "selected_recommendation_ids": ["sec:a1"],
+                    "selected_finding_ids": ["technology:f1"],
+                    "selected_recommendation_ids": ["technology:a1"],
                     "dependencies": [],
-                    "conflicting_finding_ids": ["sec:f1"],
+                    "conflicting_finding_ids": ["technology:f1"],
                 }
             ]
         }
     )
-    result = await ask("Cisco financial risks", llm=llm)
+    result = await ask("Explain Cisco router specifications", llm=llm)
     assert result.status == "needs_clarification"
     assert result.findings and not result.recommendations
 

@@ -22,7 +22,9 @@ def extract_pdf(document: dict) -> dict:
 
             text = page.get_text(
                 "text",
-                sort=True,
+                # Coordinate sorting interleaves SOFI's two newspaper columns,
+                # making otherwise contiguous quotations impossible to recover.
+                sort=document["domain"] != "corporate_responsibility",
             )
 
             page_data = {

@@ -13,7 +13,7 @@ class Settings(ContractModel):
     mode: Mode = "live"
     provider: Literal["cohere", "mistral"] = "cohere"
     api_key: SecretStr = SecretStr("")
-    model: str = "command-a-plus-05-2026"
+    model: str = "command-a-03-2025"
     router_model: str | None = None
     specialist_model: str | None = None
     synthesis_model: str | None = None
@@ -37,7 +37,7 @@ class Settings(ContractModel):
             provider=provider,
             api_key=values.get(f"{prefix}_API_KEY") or "",
             model=values.get(f"{prefix}_MODEL")
-            or ("command-a-plus-05-2026" if provider == "cohere" else "mistral-small-latest"),
+            or ("command-a-03-2025" if provider == "cohere" else "mistral-small-latest"),
             router_model=values.get(f"{prefix}_ROUTER_MODEL") or None,
             specialist_model=values.get(f"{prefix}_SPECIALIST_MODEL") or None,
             synthesis_model=values.get(f"{prefix}_SYNTHESIS_MODEL") or None,

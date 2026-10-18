@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 890" role="img" aria-label="Document ingestion and RAG">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#52647b"/></marker></defs>
+<rect width="1400" height="890" fill="#f6f8fc"/>
+<text x="45" y="52" fill="#152840" font-family="Arial,sans-serif" font-size="29" font-weight="bold">Document ingestion and RAG</text>
+<text x="45" y="86" fill="#52647b" font-family="Arial,sans-serif" font-size="17">Runtime agents read indexed text. A provenance URL is not an automatic browsing tool.</text>
+<polyline points="400,212.5 530,212.5" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="860,212.5 990,212.5" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1155.0,265 1155.0,335.0 1155.0,335.0 1155.0,405" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1164.0" y="327.0" fill="#52647b" font-family="Arial,sans-serif" font-size="15">index</text>
+<polyline points="860,457.5 990,457.5" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="999" y="449.5" fill="#52647b" font-family="Arial,sans-serif" font-size="15">query</text>
+<polyline points="1155.0,510 1155.0,580.0 1155.0,580.0 1155.0,650" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="990,702.5 860,702.5" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="530,702.5 400,702.5" fill="none" stroke="#52647b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="70" y="160" width="330" height="105" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="235.0" y="188.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Authoritative PDFs / product</text>
+<text x="235.0" y="212.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">pages</text>
+<text x="235.0" y="236.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Read / download before indexing</text>
+<rect x="530" y="160" width="330" height="105" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="695.0" y="200.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Extract + chunk</text>
+<text x="695.0" y="224.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Stable IDs, company, year, page</text>
+<rect x="990" y="160" width="330" height="105" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="1155.0" y="200.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Offline index build</text>
+<text x="1155.0" y="224.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">CPU embeddings + TF-IDF</text>
+<rect x="990" y="405" width="330" height="105" rx="12" fill="#e5efff" stroke="#4277b4" stroke-width="1.7"/>
+<text x="1155.0" y="433.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Runtime hybrid search</text>
+<text x="1155.0" y="457.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Hard domain / company / year</text>
+<text x="1155.0" y="481.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">filters</text>
+<rect x="530" y="405" width="330" height="105" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="695.0" y="445.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Focused domain subquestions</text>
+<text x="695.0" y="469.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Optional nearby passages</text>
+<rect x="990" y="650" width="330" height="105" rx="12" fill="#e0f1ea" stroke="#2f8264" stroke-width="1.7"/>
+<text x="1155.0" y="690.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Exact quote spans</text>
+<text x="1155.0" y="714.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Original document + page IDs</text>
+<rect x="530" y="650" width="330" height="105" rx="12" fill="#e9e2ff" stroke="#7352b4" stroke-width="1.7"/>
+<text x="695.0" y="690.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Specialist + manager review</text>
+<text x="695.0" y="714.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Reject unsupported claims</text>
+<rect x="70" y="650" width="330" height="105" rx="12" fill="#fff0d5" stroke="#b87a19" stroke-width="1.7"/>
+<text x="235.0" y="690.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Grounded customer answer</text>
+<text x="235.0" y="714.5" text-anchor="middle" dominant-baseline="middle" fill="#152840" font-family="Arial,sans-serif" font-size="18">Citations and explicit limits</text>
+<text x="45" y="860" fill="#52647b" font-family="Arial,sans-serif" font-size="16">Purple: model step · Blue: application code · Green: data/service · Amber: checks and decisions</text></svg>

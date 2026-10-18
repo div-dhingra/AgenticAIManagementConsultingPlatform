@@ -5,7 +5,6 @@ from pathlib import Path
 
 from transformers import AutoTokenizer
 
-
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 MAX_TOKENS = 220
@@ -48,11 +47,14 @@ def split_text_into_chunks(
     if overlap_tokens < 0 or overlap_tokens >= max_tokens:
         raise ValueError("Invalid overlap_tokens.")
 
-    token_ids = tokenizer.encode(
+    encoded = tokenizer(
         text,
         add_special_tokens=False,
+        return_offsets_mapping=True,
         verbose=False,
     )
+    token_ids = encoded["input_ids"]
+    offsets = encoded["offset_mapping"]
 
     special_tokens = tokenizer.num_special_tokens_to_add(
         pair=False
@@ -73,15 +75,10 @@ def split_text_into_chunks(
             len(token_ids),
         )
 
-        # Decode and check the actual token count.
+        # Slice the original page: decoding an uncased tokenizer changes
+        # capitalization, punctuation and table layout in cited evidence.
         while end > start:
-
-            current_tokens = token_ids[start:end]
-
-            chunk_text = tokenizer.decode(
-                current_tokens,
-                skip_special_tokens=True,
-            ).strip()
+            chunk_text = text[offsets[start][0]:offsets[end - 1][1]].strip()
 
             actual_token_count = len(
                 tokenizer.encode(

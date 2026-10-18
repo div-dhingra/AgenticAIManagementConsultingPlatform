@@ -23,11 +23,7 @@ def test_get_status(tmp_path):
 
 
 def test_retrieve_without_index(tmp_path):
-    missing_index_dir = tmp_path / "missing_index"
-
-    service = LocalKnowledgeService(
-        index_dir=missing_index_dir,
-    )
+    service = LocalKnowledgeService(index_dir=tmp_path / "missing_index")
 
     result = asyncio.run(
         service.retrieve(

@@ -1,6 +1,4 @@
-
 import re
-
 
 SECTION_PATTERNS = {
     "item_1a": r"item\s+1a\s*\.\s*risk\s+factors",
@@ -39,7 +37,7 @@ def detect_section_heading(text: str) -> str | None:
     # Some PDF pages begin with a repeated
     # "table of contents" navigation label.
     if normalized_text.startswith("table of contents "):
-        normalized_text = normalized_text[len("table of contents "):]
+        normalized_text = normalized_text[len("table of contents ") :]
 
     for section_name, pattern in SECTION_PATTERNS.items():
         match = re.match(pattern, normalized_text)
@@ -47,8 +45,18 @@ def detect_section_heading(text: str) -> str | None:
         if match:
             return section_name
 
-    return None
+    # Some reports place a real section heading after a preceding paragraph on
+    # the same chunk. Require an isolated heading line, not an inline reference
+    # or a table-of-contents entry with a page number.
+    for line in text.splitlines():
+        line = " ".join(line.lower().split())
+        if not line or len(line) > 160 or re.search(r"\d+\s*$", line):
+            continue
+        for section_name, pattern in SECTION_PATTERNS.items():
+            if re.match(pattern, line):
+                return section_name
 
+    return None
 
 
 def detect_section_boundary(text: str) -> str | None:
@@ -79,7 +87,7 @@ def detect_section_boundary(text: str) -> str | None:
         return None
 
     # Only accept a boundary near the end.
-    remaining_text = normalized_text[match.end():]
+    remaining_text = normalized_text[match.end() :]
 
     if len(remaining_text) < 30:
         return "item_1b"

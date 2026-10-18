@@ -46,7 +46,11 @@ For development before the real KB is ready, the CLI also accepts `--mode live
 --evidence-file fixtures/consulting/controlled_real_passages.json`. This runs real
 provider calls on selected real passages and always warns that search/full source
 coverage are not evaluated. It is an explicit local testing path, not an outage
-fallback or a new HTTP parameter. See `docs/CONTROLLED_TESTS.md`.
+fallback or a new HTTP parameter. For the API/Streamlit path, explicitly set
+`APP_MODE=live CONSULT_EVIDENCE_FILE=fixtures/consulting/controlled_real_passages.json`
+at API startup. Empty/unset `CONSULT_EVIDENCE_FILE` uses the normal KB factory.
+Health and consultation responses disclose the selected-source limitation; retail
+is unchanged. See `docs/CONTROLLED_TESTS.md`.
 
 ## Knowledge teammate
 
@@ -96,3 +100,8 @@ for trusted developer startup, never a customer-controlled API argument.
 API readiness, evaluation reports, and the interface should disclose actual
 corpus coverage. Real-corpus retrieval and human answer-quality metrics remain
 pending until B's artifacts and reviewed evidence labels are supplied.
+
+
+See [Answer completeness and demo verification](ANSWER_VALIDATION.md) for the private
+per-question coverage checklist, focused retrieval, cited narrative, and repeated
+live acceptance commands. Public HTTP contracts are unchanged.

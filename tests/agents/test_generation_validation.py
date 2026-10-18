@@ -12,6 +12,38 @@ from consulting_platform.agents.models import RoutePlan
 from consulting_platform.contracts import UpstreamModelError
 
 
+async def test_specialist_wire_constrains_evidence_to_supplied_chunk_ids():
+    from consulting_platform.agents.models import SpecialistAnalysis
+
+    class Recorder:
+        schema = None
+
+        async def generate_json(self, **kwargs):
+            self.schema = kwargs["schema"]
+            return {"findings": []}
+
+    client = Recorder()
+    await generate(
+        client,
+        RequestBudget(),
+        SpecialistAnalysis,
+        role="sec",
+        system="JSON",
+        payload={
+            "chunks": [
+                {
+                    "chunk_id": "original-chunk-17",
+                    "document_id": "not-a-chunk-id",
+                    "quote_spans": [],
+                }
+            ]
+        },
+    )
+    support = client.schema["$defs"]["Support"]["properties"]
+    assert support["evidence_id"]["enum"] == ["original-chunk-17"]
+    assert "quote" not in support
+
+
 async def test_known_model_wrapper_is_normalized_without_retry():
     client = ScriptedLLMClient({"router": [{"RoutePlan": {"tasks": {}}}]})
     budget = RequestBudget()
@@ -76,7 +108,7 @@ def test_duplicate_json_fields_are_not_silently_overwritten():
         parse_json_object('{"tasks": {}, "tasks": {}}')
 
 
-async def test_adapter_failure_reports_safe_path_and_reason_when_shared_repair_is_used():
+async def test_adapter_failure_reports_safe_path_when_request_repair_cap_is_exhausted():
     class BadMapClient:
         async def generate_json(self, **kwargs):
             return restore_cohere_maps(
@@ -89,7 +121,7 @@ async def test_adapter_failure_reports_safe_path_and_reason_when_shared_repair_i
                 RoutePlan.model_json_schema(),
             )
 
-    budget = RequestBudget(calls=2, repair_used=True)
+    budget = RequestBudget(calls=2, repair_used=True, repair_count=3)
     with pytest.raises(
         UpstreamModelError, match=r"router: root.tasks.1 .*duplicate_map_key"
     ) as error:

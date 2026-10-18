@@ -1,0 +1,17 @@
+flowchart TD
+    U[Customer question + optional context] --> V[validate_input: conflicting context?]
+    V --> R[route: LLM selects domains + subquestion checklist]
+    R --> T[Technology specialist graph]
+    R --> C[Clinical specialist graph]
+    R --> S[SEC specialist graph]
+    R --> F[CSR / Food-security specialist graph]
+    T --> E[validate_evidence: per-domain reviews + coverage]
+    C --> E
+    S --> E
+    F --> E
+    E --> Q{Missing source answer and budget/time left?}
+    Q -->|Once only| H[targeted_follow_up: refine one domain search]
+    H --> E
+    Q -->|No| Y[synthesize: select IDs + sequence actions]
+    Y --> Z[finalize: fault gate, coverage, natural answer + citations]
+    Z --> O[Answered / Needs clarification / Partial / Insufficient evidence]

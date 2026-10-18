@@ -1,0 +1,18 @@
+flowchart TD
+    USER[Enterprise customer / consultant] --> UI[Streamlit: Consulting + Retail tabs]
+    UI -->|HTTP JSON| API[FastAPI: validation, startup, deadlines, errors]
+    API -->|POST /consult| MAN[Consulting manager + specialist LangGraphs]
+    API -->|GET /health| HEALTH[Service and corpus readiness]
+    API -->|POST /recommend + catalog| RET[Retail service: association rules + ranking]
+    CSV[Basket CSV] --> TRAIN[Offline retail training / evaluation]
+    TRAIN --> ART[(Retail artifact)]
+    ART --> RET
+    MAN -->|Shared KnowledgeService protocol| KB[Local retrieval: strict metadata + hybrid ranking]
+    KB --> INDEX[(Chunks + embeddings + TF-IDF index)]
+    MAN --> LLM[Cohere adapter / explicitly selected Mistral adapter]
+    LLM --> PROVIDER[External model API]
+    MAN --> RESULT[Grounded answer, recommendations, citations, uncertainty]
+    RET --> PRODUCTS[Basket recommendations + scores + explanations]
+    RESULT --> API
+    PRODUCTS --> API
+    NOTE[Retail association-rule recommendation does not need an LLM] -.-> RET

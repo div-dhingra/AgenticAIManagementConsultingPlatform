@@ -18,6 +18,40 @@ are not being evaluated. Useful answers will normally be `partial` due to that
 warning; this is intentional. Do not confuse it with a failed API request. No
 automatic fallback to this source occurs when a production KB fails.
 
+## Use the Streamlit frontend with real inference
+
+Stop the existing API with Ctrl+C, then start it with these explicit overrides:
+
+```bash
+APP_MODE=live CONSULT_EVIDENCE_FILE=fixtures/consulting/controlled_real_passages.json \
+  .venv/bin/uvicorn consulting_platform.api.app:create_app --factory --port 8000
+```
+
+In another terminal:
+
+```bash
+.venv/bin/streamlit run src/consulting_platform/ui/app.py
+```
+
+Open http://localhost:8501, refresh the page and click **Refresh status**. The
+Consulting tab shows a controlled-evidence notice and buttons for Cisco risks,
+router ports, and SOFI financing. Click an example, then **Ask**. These make real
+model calls using the key already configured in your local `.env`. Clinical has
+no selected evidence. The sidebar reports limited knowledge coverage, not a fully
+indexed corpus. Retail continues to use its normal live model artifact.
+
+Alternatively, put `APP_MODE=live` and
+`CONSULT_EVIDENCE_FILE=fixtures/consulting/controlled_real_passages.json` in `.env`.
+The environment variable takes precedence over `.env`; paths are repo-relative
+or absolute and are read only at API startup. A missing/invalid selected file
+makes consulting unavailable; it does not silently load another source.
+
+When teammate 1's service is ready, remove/empty `CONSULT_EVIDENCE_FILE` and restart
+the API. To override a value still present in `.env`, launch with
+`APP_MODE=live CONSULT_EVIDENCE_FILE= ...` (empty value). Demo mode requires the
+controlled-file setting to be empty. No HTTP request fields or routes change;
+customers cannot choose local files through the API.
+
 ## Sources and provenance
 
 - **Technology:** selected factual columns from Cisco Catalyst 8300 datasheet,
@@ -96,6 +130,42 @@ If a response is empty, inspect `warnings` for evidence rejection categories. If
 structured output fails after the bounded retry, the error now identifies the
 model role and invalid field paths/types. No reinstall or API contract change is
 needed for these fixes in an editable installation.
+
+## Interpreting cross-domain results
+
+Missing Agilent passages are a source-coverage gap, not a request to keep asking
+until a response converges. Repeated requests do not accumulate conversation
+history. Add customer requirements only when genuinely missing.
+
+The manager now publishes product options only after their required attributes
+validate, prevents execution dependencies between product alternatives, and
+reviews whether clarification questions are necessary. It distinguishes source
+requests from customer preferences. Source-availability notices use retrieved
+metadata; generated limitations and rejected extraction details remain visible
+under **Evidence checks and specialist notes**. A successful follow-up replaces
+stale comparison warnings while preserving its earlier diagnostic trace.
+
+For the selected Cisco table, the extractor can deterministically verify a port
+count against the correct speed column and model row, attaching the exact header
+when necessary. A `-` is not converted to zero. Unsupported or ambiguous values
+still cause abstention. See `tests/agents/test_reliability.py` for regression cases.
+
+Controlled evidence does not perform a second retrieval round for a refined query,
+because its selected passages would be unchanged. This saves optional model calls
+in cross-domain tests. The 90-second overall deadline and configured per-model-call
+timeout still apply. HTTP 504 messages distinguish provider-call timeouts from
+the overall request timeout; a timeout does not imply invalid customer input.
+
+Port-count comparisons no longer require an LLM-extracted candidate catalog: the
+actual table rows and speed columns supply the count facts. The preset's explicit
+context supplies the criterion. Verified results survive accidental omission in
+model selection; ambiguous cells do not. Regression tests vary names, values,
+attribute spelling, and units so the expected 6T result is not hardcoded.
+
+For CSR, source-backed assessment proposals are separated from their quoted report
+premises. General data-quality evidence permits exploring a connectivity hypothesis,
+not recommending infrastructure procurement. Both direct findings and the source
+basis of any remaining proposals are reflected in the summary.
 
 ## What still depends on teammates
 
