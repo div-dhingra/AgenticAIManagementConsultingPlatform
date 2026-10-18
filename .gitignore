@@ -13,3 +13,5 @@ data/processed/
 artifacts/
 evaluation/consulting/runs/
 fixtures/source_documents/
+# Generated knowledge retrieval index
+/data/index/
