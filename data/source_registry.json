@@ -1,0 +1,32 @@
+﻿{
+    "technology/Cisco/catalyst_8300.pdf": {
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8300-series-edge-platforms/datasheet-c78-744088.pdf"
+    },
+    "technology/Cisco/catalyst_8200.pdf": {
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8200-series-edge-platforms/nb-06-cat8200-series-edge-plat-ds-cte-en.pdf"
+    },
+    "technology/Cisco/catalyst_8000v.pdf": {
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8000v-edge-software/catalyst-8000v-edge-software-ds.pdf"
+    },
+    "technology/Cisco/cisco_4000_isr.pdf": {
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/4000-series-integrated-services-routers-isr/data_sheet-c78-732542.pdf"
+    },
+    "technology/Cisco/cisco_asr_1000.pdf": {
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/asr-1000-series-aggregation-services-routers/datasheet-c78-731632.pdf"
+    },
+    "technology/Google/gcp_mcp_overview.pdf": {
+    "original_url": "https://docs.cloud.google.com/mcp/overview"
+    },
+    "technology/Google/gcp_rag.pdf": {
+        "original_url": "https://cloud.google.com/use-cases/retrieval-augmented-generation"
+    },
+    "clinical/Agilent/agilent_nanozoomer.pdf": {
+    "original_url": "https://www.agilent.com/en/product/digital-pathology/digital-pathology-scanners/nanozoomer-slide-scanner-system-4370282"
+    },
+    "clinical/Agilent/agilent_seahorse.pdf": {
+        "original_url": "https://www.agilent.com/en/product/cell-analysis/real-time-cell-metabolic-analysis"
+    },
+    "clinical/Agilent/agilent_artisan_link_pro.pdf": {
+    "original_url": "https://www.agilent.com/en/product/special-stains"
+    }
+}

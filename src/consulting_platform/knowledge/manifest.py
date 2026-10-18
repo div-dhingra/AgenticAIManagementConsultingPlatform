@@ -59,6 +59,13 @@ def create_manifest(
     data_path = Path(data_dir)
     raw_path = data_path / "raw"
 
+    registry_path = data_path / "source_registry.json"
+    source_registry = {}
+
+    if registry_path.exists():
+        with open(registry_path, "r", encoding="utf-8-sig") as file:
+            source_registry = json.load(file)
+
     documents = []
 
     for domain in DOMAIN_NAMES:
@@ -68,6 +75,8 @@ def create_manifest(
             continue
 
         for pdf_path in sorted(domain_path.rglob("*.pdf")):
+            relative_path = pdf_path.relative_to(raw_path).as_posix()
+            source_info = source_registry.get(relative_path, {})
             file_hash = calculate_sha256(pdf_path)
 
             try:
@@ -79,8 +88,6 @@ def create_manifest(
                     "domain": domain,
                     "company": (
                         identify_company(pdf_path)
-                        if domain == "sec"
-                        else None
                     ),
                     "report_year": (
                         identify_report_year(pdf_path)
@@ -93,7 +100,7 @@ def create_manifest(
                         else None
                     ),
                     "local_path": pdf_path.as_posix(),
-                    "original_url": None,
+                    "original_url": source_info.get("original_url"),
                     "import_date": datetime.now(
                         timezone.utc
                     ).date().isoformat(),

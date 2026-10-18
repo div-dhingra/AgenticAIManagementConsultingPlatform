@@ -1,5 +1,176 @@
 [
     {
+        "document_id": "35ae9f89ac2f759e",
+        "title": "Cisco Catalyst 8000V Edge Software Data Sheet",
+        "domain": "technology",
+        "company": "Cisco",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Cisco/catalyst_8000v.pdf",
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8000v-edge-software/catalyst-8000v-edge-software-ds.pdf",
+        "import_date": "2026-10-18",
+        "sha256": "35ae9f89ac2f759eca53f33f1ffdc9f82440cd2e1c587d2282623cf53a4a32ec",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 19
+    },
+    {
+        "document_id": "35f1e32c3007c51a",
+        "title": "Cisco Catalyst 8200 Series Edge Platforms Data Sheet",
+        "domain": "technology",
+        "company": "Cisco",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Cisco/catalyst_8200.pdf",
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8200-series-edge-platforms/nb-06-cat8200-series-edge-plat-ds-cte-en.pdf",
+        "import_date": "2026-10-18",
+        "sha256": "35f1e32c3007c51ad243ab1e6a0007cbf0f356cddc580b0289e8579a7d8ae4fc",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 20
+    },
+    {
+        "document_id": "080c1fb4ec06d188",
+        "title": "Cisco Catalyst 8300 Series Edge Platforms Data Sheet",
+        "domain": "technology",
+        "company": "Cisco",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Cisco/catalyst_8300.pdf",
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/catalyst-8300-series-edge-platforms/datasheet-c78-744088.pdf",
+        "import_date": "2026-10-18",
+        "sha256": "080c1fb4ec06d188943ff5d5aea4f24a408fae4f614e9ba08c48a2567865c669",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 24
+    },
+    {
+        "document_id": "c2f839af37bb1313",
+        "title": "Cisco 4000 Family Integrated Services Router Data Sheet",
+        "domain": "technology",
+        "company": "Cisco",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Cisco/cisco_4000_isr.pdf",
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/4000-series-integrated-services-routers-isr/data_sheet-c78-732542.pdf",
+        "import_date": "2026-10-18",
+        "sha256": "c2f839af37bb1313ba0399a546629ac6a04dc69dce0307cce654c1f787d48e3e",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 28
+    },
+    {
+        "document_id": "c27cc68efce178f9",
+        "title": "Cisco ASR 1000 Series Aggregation Services Routers Data Sheet",
+        "domain": "technology",
+        "company": "Cisco",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Cisco/cisco_asr_1000.pdf",
+        "original_url": "https://www.cisco.com/c/en/us/products/collateral/routers/asr-1000-series-aggregation-services-routers/datasheet-c78-731632.pdf",
+        "import_date": "2026-10-18",
+        "sha256": "c27cc68efce178f99e7dec2f140b337c74828ab3059019d4c685f221300cd69a",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 31
+    },
+    {
+        "document_id": "4336aacc909db06d",
+        "title": "What is Model Context Protocol (MCP)? A guide | Google Cloud",
+        "domain": "technology",
+        "company": "Google",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Google/gcp_mcp_overview.pdf",
+        "original_url": "https://docs.cloud.google.com/mcp/overview",
+        "import_date": "2026-10-18",
+        "sha256": "4336aacc909db06d2aaeda77d288983fc396c0a88529103677839602c32b93e8",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 15
+    },
+    {
+        "document_id": "17eafb1e4393ea9a",
+        "title": "What is Retrieval-Augmented Generation (RAG)? | Google Cloud",
+        "domain": "technology",
+        "company": "Google",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/technology/Google/gcp_rag.pdf",
+        "original_url": "https://cloud.google.com/use-cases/retrieval-augmented-generation",
+        "import_date": "2026-10-18",
+        "sha256": "17eafb1e4393ea9a1f2dd64ba4efb888932949089d633f8e615e2abde20e91bf",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 7
+    },
+    {
+        "document_id": "257dcefe9bd1a293",
+        "title": "Digital Pathology Scanners | Agilent",
+        "domain": "clinical",
+        "company": "Agilent",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/clinical/Agilent/agilent_nanozoomer.pdf",
+        "original_url": "https://www.agilent.com/en/product/digital-pathology/digital-pathology-scanners/nanozoomer-slide-scanner-system-4370282",
+        "import_date": "2026-10-18",
+        "sha256": "257dcefe9bd1a29397b049d178a9b657efc02d9b2e8ae95a2953132bfabf6732",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 2
+    },
+    {
+        "document_id": "617130ecdf0c5c55",
+        "title": "Real-Time Cell Metabolic Analysis, Seahorse XF | Agilent",
+        "domain": "clinical",
+        "company": "Agilent",
+        "report_year": null,
+        "filing_type": null,
+        "local_path": "data/raw/clinical/Agilent/agilent_seahorse.pdf",
+        "original_url": "https://www.agilent.com/en/product/cell-analysis/real-time-cell-metabolic-analysis",
+        "import_date": "2026-10-18",
+        "sha256": "617130ecdf0c5c559b156e30f3e39d9d2658753634d2fdf8688e3e34230f7ce0",
+        "content_type": "application/pdf",
+        "coverage": "Metadata pending review",
+        "limitations": [
+            "Company and report year require verification."
+        ],
+        "ingestion_status": "imported",
+        "page_count": 2
+    },
+    {
         "document_id": "c82491a940bf2a3c",
         "title": "0001090872-25-000087",
         "domain": "sec",
